@@ -1,0 +1,19 @@
+---
+title: Example of Slides using Rmd
+output: 
+  beamer_presentation 
+---
+
+```{r setup, include=FALSE}
+```
+
+# Introduction
+```{r, child="intro.Rmd", eval=TRUE}
+```
+
+# Section 1
+```{r, child="sec1.Rmd", eval=TRUE}
+```
+
+
+

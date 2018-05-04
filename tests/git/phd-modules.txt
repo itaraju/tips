@@ -1,0 +1,137 @@
+Init
+----
+
+Based on https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial
+
+Overall strucutre:
+
+	mkdir ~/subtest
+	cd ~/subtest
+	mkdir bio3
+	mkdir mac
+	mkdir github
+
+Creating content on bio3
+
+	cd ~/subtest/bio3
+	mkdir phd
+	cd phd
+	mkdir data
+	mkdir script
+	mkdir -p reports/paper
+	mkdir -p reports/exam
+	echo "this is the super folder" > readme.txt
+	echo "a b c d" > data/dt.csv
+	echo "scrit 1" > script/rs.R
+	echo "title" > reports/paper/text.txt
+	echo "slide" > reports/exam/pres.txt
+
+
+Now we have bio3 with the final wanted structure:
+
+	find .
+	./phd
+	./phd/data
+	./phd/data/dt.csv
+	./phd/readme.txt
+	./phd/reports
+	./phd/reports/exam
+	./phd/reports/exam/pres.txt
+	./phd/reports/paper
+	./phd/reports/paper/text.txt
+	./phd/script
+	./phd/script/rs.R
+
+
+But without git system. Let's add git and remote repository in following steps, using ~/bio3/repo as temporary repository to intermediate the transfers.
+
+
+	cd ~/subtest/bio3
+	mkdir repo
+	mv phd/reports/exam repo/
+	mv phd/reports/paper repo/
+
+
+Initializing submodule gits for reports folder:
+
+	cd ~/subtest/bio3/repo/paper
+	git init
+	git add .
+	git commit -m "starting paper"
+	git clone --bare . ~/subtest/github/paper.git
+	git remote add origin ~/subtest/github/paper.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+
+	cd ../exam
+	git init
+	git add .
+	git commit -m "starting exam"
+	git clone --bare . ~/subtest/github/exam.git
+	git remote add origin ~/subtest/github/exam.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+
+
+Initializing superproject git
+
+	cd ~/subtest/bio3/phd
+	git init
+	git add .
+	git commit -m "starting super"
+	
+	git clone --bare . ~/subtest/github/phd.git
+	git remote add origin ~/subtest/github/phd.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+
+Adding submodules to superproject:
+
+	cd ~/subtest/bio3/phd/reports
+	git submodule add ~/subtest/github/exam.git
+	git submodule add ~/subtest/github/paper.git
+	git submodule init
+	cd ~/subtest/bio3/phd
+	git commit -m "added submodules paper and exam"
+	git push
+	#git submodule init
+
+
+Going to mac:
+
+	cd ~/subtest/mac
+	git clone ~/subtest/github/phd.git
+	cd phd
+	git submodule init
+	git submodule update
+
+
+Working on the mac
+------------------
+
+Some changes:
+
+	cd ~/subtest/mac/phd/reports/paper
+	git checkout master
+	echo "abstract" >> text.txt
+	git add text.txt
+	git commit -m "added the abstract"
+
+
+Publishing the changes (from where we were reports/paper/):
+
+	git push
+	cd ../../
+	git add reports/paper
+	git commit -m "modified the paper"
+	git push
+
+
+Now back to bio3
+----------------
+
+Pulling back the changes made on the mac:
+
+	cd ~/subtest/bio3/phd/
+	git pull
+	git submodule update

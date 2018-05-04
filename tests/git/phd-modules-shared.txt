@@ -1,0 +1,251 @@
+Init
+----
+
+Creating everything, with just one report:
+
+	mkdir ~/subtest
+	cd ~/subtest
+	mkdir bio3
+	mkdir mac
+	mkdir github
+	cd ~/subtest/bio3
+	mkdir phd
+	cd phd
+	mkdir data
+	mkdir script
+	mkdir -p report
+	echo "this is the super folder" > readme.txt
+	echo "a b c d" > data/dt.csv
+	echo "scrit 1" > script/rs.R
+	echo "title" > report/text.txt
+
+	find .
+
+	cd ~/subtest/bio3
+	mkdir repo
+	mv phd/report repo/
+
+	cd ~/subtest/bio3/repo/report
+	git init
+	git add .
+	git commit -m "starting paper"
+	git clone --bare . ~/subtest/github/report.git
+	git remote add origin ~/subtest/github/report.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+	git push
+
+	cd ~/subtest/bio3/phd
+	git init
+	git add .
+	git commit -m "starting super"
+	
+	git clone --bare . ~/subtest/github/phd.git
+	git remote add origin ~/subtest/github/phd.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+	git push
+
+	cd ~/subtest/bio3/phd/
+	git submodule add ~/subtest/github/report.git
+	git commit -m "added submodules paper and exam"
+	git push
+	git submodule init
+
+	cd ~/subtest/mac
+	git clone --recursive ~/subtest/github/phd.git
+
+	cd ~/subtest/mac/phd/report
+	git checkout master
+	echo "abstract" >> text.txt
+	git add text.txt
+	git commit -m "added the abstract"
+
+	git push
+	cd ..
+	git add report
+	git commit -m "modified the paper"
+	git push
+
+	cd ~/subtest/bio3/phd/
+	git submodule update --remote
+	
+	git fetch
+	git merge origin/master
+
+
+Inverting submodules
+--------------------
+
+As in submodules-share-worktree.txt, and making phd as submodule in report.
+
+First, let's remove the submodule. From: https://stackoverflow.com/a/44863971/7774591
+
+	cd ~/subtest/mac/phd
+	
+	git rm -f report
+	rm -rf .git/modules/report
+	git config -f .git/config --remove-section submodule.report
+	git commit -m "removed submodule report"
+	git push
+
+Testing:
+
+	cd ~/subtest/mac
+	git clone --recursive ~/subtest/github/phd.git ./phd2
+	cd phd2
+
+Nothing from submodule there. Ok
+
+	cd ..
+	rm -rf phd2
+
+Transmitting to bio3
+
+	cd ~/subtest/bio3/phd
+	git pull
+
+Generates untracked report/, and there are content remaining. So:
+
+	rm -rf report
+	git config -f .git/config --remove-section submodule.report
+	rm -rf .git/modules/report
+
+Replacing report
+
+	cd ~/subtest/mac
+	git clone ~/subtest/github/report.git
+
+Adding phd as submodule
+	cd report
+	git submodule add ~/subtest/github/phd.git
+	git submodule init
+	git commit -m "added phd submodule"
+
+Changing to shared worktree
+	git submodule deinit phd
+	rm -rf .git/modules/phd
+
+	mkdir -p .submods
+	git mv phd .submods/
+	echo "gitdir: /Users/itaraju/subtest/mac/phd/.git" > .submods/phd/.git
+	ln -s ~/subtest/mac/phd phd
+	echo "/phd" >> .gitignore
+	
+	git reset --soft HEAD^ # optional: if done, it will "merge" previous commit and next into single one:
+	git add .
+	git commit -m "shared phd"
+	git push
+
+Transmitting to bio3:
+	cd ~/subtest/bio3/repo/report
+	git pull
+
+	ln -s /Users/itaraju/subtest/bio3/phd phd
+	echo "gitdir: /Users/itaraju/subtest/bio3/phd/.git" > .submods/phd/.git
+
+
+Log of Execution
+================
+
+
++ba9d50f9baa58cfa0cfaf1bfa23c82a8425a1800 reports/paper-mating (heads/master)
++ca6b1c43ec0f1d558c5873895d50d1ebc7c0186a reports/paper-matrix (heads/master)
+ 969db9fabff66db4b854c4bfba08490daa6c4993 reports/paper-rs (heads/master)
++55bdb3bf99f0adf4b42f398cb20efc6a99a3b253 reports/paper-sugarcane-gp (v7)
+
+reports/paper-mating
+reports/paper-matrix
+reports/paper-rs
+reports/paper-sugarcane-gp
+
+gs-v1 side on mac
+-----------------
+
+git rm -f reports/paper-mating
+git rm -f reports/paper-matrix
+git rm -f reports/paper-rs
+git rm -f reports/paper-sugarcane-gp
+
+rm -rf .git/modules/reports/paper-mating
+rm -rf .git/modules/reports/paper-matrix
+rm -rf .git/modules/reports/paper-rs
+rm -rf .git/modules/reports/paper-sugarcane-gp
+
+git config -f .git/config --remove-section submodule.reports/paper-mating
+git config -f .git/config --remove-section submodule.reports/paper-matrix
+git config -f .git/config --remove-section submodule.reports/paper-rs
+git config -f .git/config --remove-section submodule.reports/paper-sugarcane-gp
+
+git commit -m "Removed paper submodules"
+git push
+
+bio3 side
+---------
+
+cd ~/gs-v1
+git pull
+cd reports
+rm -rf paper-sugarcane-gp
+cd ..
+git config -f .git/config --remove-section submodule.reports/paper-sugarcane-gp
+
+
+paper sides on mac
+------------------
+
+(paper-clone-gp and paper-parent-gp had been moved to ~/Projects before as they were not submodules to gs-v1)
+
+	cd ~/Projects
+	git clone git@github.com:itaraju/paper-sugarcane-gp
+
+	git clone git@github.com:itaraju/paper-sugarcane-gp.git
+	git clone git@github.com:itaraju/paper-mating.git
+	git clone git@github.com:itaraju/paper-matrix.git
+	git clone git@github.com:itaraju/paper-rs.git
+
+
+	cd paper-sugarcane-gp #ok
+	cd paper-mating #ok
+	cd paper-matrix #ok
+	# cd paper-rs # skipping, no need yet
+	cd paper-clone-gp #ok
+	cd paper-parent-gp
+
+foreach paper:	
+	
+	git submodule add git@github.com:itaraju/gs-v1.git
+	git submodule init
+	git commit -m "Added gs-v1 as submodule"
+
+	git submodule deinit gs-v1
+	rm -rf .git/modules/gs-v1
+
+	mkdir -p .submods
+	git mv gs-v1 .submods/
+	echo "gitdir: /Users/itaraju/Projects/gs-v1/.git" > .submods/gs-v1/.git
+	ln -s ~/Projects/gs-v1 gs-v1
+	echo "
+
+# links to submodule checkouts
+/gs-v1" >> .gitignore
+
+
+	git reset --soft HEAD^ # making these a single commit
+	git add .gitignore
+	git commit
+	git push
+	cd ..
+
+
+Commit message:
+---------------
+
+Added gs-v1 a shared submodule
+
+Using links to a submodule worktree as proposed in:
+https://stackoverflow.com/a/45768462/7774591
+
+- link to gs-v1 added only to worktree (gitignored)
+
+- made .Rmd to load files from the linked ./gs-v1

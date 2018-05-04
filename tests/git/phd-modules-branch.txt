@@ -1,0 +1,105 @@
+Init
+----
+
+Based on https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial
+
+Creating everything, with just one report:
+
+	mkdir ~/subtest
+	cd ~/subtest
+	mkdir bio3
+	mkdir mac
+	mkdir github
+	cd ~/subtest/bio3
+	mkdir phd
+	cd phd
+	mkdir data
+	mkdir script
+	mkdir -p report
+	echo "this is the super folder" > readme.txt
+	echo "a b c d" > data/dt.csv
+	echo "scrit 1" > script/rs.R
+	echo "title" > report/text.txt
+
+	find .
+
+	cd ~/subtest/bio3
+	mkdir repo
+	mv phd/report repo/
+
+	cd ~/subtest/bio3/repo/report
+	git init
+	git add .
+	git commit -m "starting paper"
+	git clone --bare . ~/subtest/github/report.git
+	git remote add origin ~/subtest/github/report.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+
+	cd ~/subtest/bio3/phd
+	git init
+	git add .
+	git commit -m "starting super"
+	
+	git clone --bare . ~/subtest/github/phd.git
+	git remote add origin ~/subtest/github/phd.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+
+	cd ~/subtest/bio3/phd/
+	git submodule add ~/subtest/github/report.git
+	git commit -m "added submodules paper and exam"
+	git push
+	git submodule init
+
+	cd ~/subtest/mac
+	git clone --recursive ~/subtest/github/phd.git
+
+	cd ~/subtest/mac/phd/report
+	git checkout master
+	echo "abstract" >> text.txt
+	git add text.txt
+	git commit -m "added the abstract"
+
+	git push
+	cd ..
+	git add report
+	git commit -m "modified the paper"
+	git push
+
+	cd ~/subtest/bio3/phd/
+	git submodule update --remote
+	
+	git fetch
+	git merge origin/master
+
+Branching paper
+---------------
+
+	cd ~/subtest/mac/phd/report
+	git branch results
+	git checkout results
+	echo "results" >> text.txt
+	git add .
+	git commit -m "now we have results"
+
+Let's publish it
+
+	git push --all
+	cd ..
+	git add report
+	git commit -m "paper got results now"
+	git push 
+
+Note: if after the `commit` above (with or without the `push`) one checks-out back to `master` then there will not be any changes to commit in the superproject. 
+
+Anyway, going ahead, pulling it back on bio3:
+
+	cd ~/subtest/bio3/phd/report
+	git fetch
+	git checkout -b results --track origin/results
+
+	cd ..
+	git pull
+	git submodule update
+

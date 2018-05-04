@@ -1,0 +1,519 @@
+Init
+----
+
+Based on https://git.wiki.kernel.org/index.php/GitSubmoduleTutorial
+
+Creating everything, with just one lib1:
+
+	mkdir ~/subtest
+	cd ~/subtest
+	mkdir linux
+	mkdir mac
+	mkdir github
+	cd ~/subtest/linux
+	mkdir proj1
+	mkdir lib1
+	echo "this is the super folder" > proj1/readme.txt
+	echo "a b c d" > lib1/dt.csv
+
+	find .
+.
+./lib1
+./lib1/dt.csv
+./proj1
+./proj1/readme.txt
+
+
+	cd ~/subtest/linux/lib1
+	git init
+	git add .
+	git commit -m "starting lib1"
+	git clone --bare . ~/subtest/github/lib1.git
+	git remote add origin ~/subtest/github/lib1.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+	git push origin master
+
+	cd ~/subtest/linux/proj1
+	git init
+	git add .
+	git commit -m "starting proj1"
+	git clone --bare . ~/subtest/github/proj1.git
+	git remote add origin ~/subtest/github/proj1.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+	git push origin master
+
+
+(the following examples are inverting the intended master/submodule relation for proj1/lib1.
+Solution 3 has it worked out)
+
+Attempt 1
+=========
+
+Cloning proj1 in mac:
+
+	cd ~/subtest/mac
+	git clone --recursive ~/subtest/github/proj1.git
+
+new structure in the mac
+------------------------
+
+	cd ~/subtest/mac
+	git clone ~/subtest/github/lib1.git
+	cd lib1
+	git submodule add ~/subtest/github/proj1.git
+	git submodule init
+	git add .
+	git commit -m "added proj1 submodule"
+	
+
+Adding a change to proj1
+------------------------
+
+	cd ~/subtest/mac/proj1/script
+	echo "change1" >> rs.R
+	git add ./rs.R
+	git commit -m "change 1"
+	git push
+
+How is it reflected in the lib1?
+
+	cd ~/subtest/mac/lib1/proj1
+	git status
+
+Not much.
+
+	git fetch
+	git status
+	
+There it is. so:
+	
+	git pull
+
+things are all duplicated:
+
+	cd ~/subtest/mac
+	tree
+	
+ |-proj1
+ |---data
+ |---script
+ |-lib1
+ |---proj1
+ |-----data
+ |-----script
+
+
+linking? (not tested if it works)
+---------------------------------
+
+but question stated in question "Share a working tree with git submodules":
+https://stackoverflow.com/q/4366788/7774591 
+tells linking does not solve it.
+	
+the trick:
+
+	rm -rf proj1
+	ln -s ../proj1 .
+
+git status tells that there was a typechange
+
+	git add .
+	git commit -m "submodule turned into a link"
+	
+does it work?
+
+	cd ~/subtest/mac/proj1
+
+	
+Solution 1 - edit .git file
+=============================
+
+Based on a StackOverflow (SO) Solution: https://stackoverflow.com/a/27384763/7774591
+for question "Git: Possible to use same submodule working copy by multiple projects?"
+
+(starting after last command from "Init" section above)
+
+First, let's change proj1, adding the submodule lib1
+
+	cd ~/subtest/linux/proj1
+	git submodule add ~/subtest/github/lib1.git
+	git submodule init
+	git commit -m "added lib1 submodule"
+	git push
+
+
+Let's clone proj1, as the first step in the SO solution. Then,
+> a submodule is just a repository. We're going to share this one.
+	cd ~/subtest/mac
+	git clone ~/subtest/github/lib1.git
+ 
+> and keep its worktree right here:
+
+	cd lib1
+	git config core.worktree ..
+	
+> Then, from anywhere, clone the project using the submodule and set it up to use the shared one:
+
+	cd ~/subtest/mac
+	git clone ~/subtest/github/proj1.git
+	cd proj1
+	git submodule init
+	echo gitdir: ~/subtest/mac/lib1/.git > lib1/.git
+
+From SO:
+Now proj1's lib1 submodule will use the shared lib1 repo and worktree.
+
+Set up your build system to use that same worktree and you're done. You can of course get git to
+tell you where those are in any given repo:
+
+> for example to see where all a project's submodules' parts are kept
+	git submodule foreach git rev-parse --git-dir --show-toplevel
+
+or...
+
+	cd lib1
+	git rev-parse --git-dir --show-toplevel
+
+or:
+	git rev-parse --git-dir
+	
+
+Testing
+-------
+
+Make changes to shared proj1:
+
+	cd ~/subtest/mac/proj1/script
+	echo "change 1" >> rs.R
+	cd ..
+	git add .
+	git commit -m "change 1"
+	git push
+	
+Back to the lib1:
+
+	cd ~/subtest/mac/lib1
+	git status
+	
+It shows that there are new commit on proj1. Good.
+So here, we are able to know that the submodule `proj1` in the lib1
+is pointing out to an older commit.
+
+Which commit?
+	git ls-tree HEAD
+
+`proj1` commit is there. And the original?
+
+	cd ~/subtest/mac/proj1
+	git log
+	
+The first commit has the same hash.
+
+There might be easier way to check it.
+
+
+Solution 2 - using worktree feature
+===================================
+
+Based on SO: https://stackoverflow.com/a/44649319/7774591
+
+(starting after last command from "Init" section above)
+
+First, let's change lib1, adding the submodule proj1
+
+	cd ~/subtest/linux/lib1
+	git submodule add ~/subtest/github/proj1.git
+	git submodule init
+	git add .
+	git commit -m "added proj1 submodule"
+	git push
+
+
+And let's clone them into the `mac`:
+
+	cd ~/subtest/mac
+	git clone ~/subtest/github/proj1.git
+	git clone --recursive ~/subtest/github/lib1.git
+	
+Following the steps in the SO answer:
+
+1.
+	cd ~/subtest/mac/lib1
+	rm -rf proj1
+2.
+	cd .git/modules
+	rm -rf proj1
+3.
+	cd ~/subtest/mac/proj1
+4. create new branch?
+	git branch lib1
+5.
+	git worktree add ~/subtest/mac/lib1/proj1 lib1
+
+got:
+> Preparing /Users/itaraju/subtest/mac/lib1/proj1 (identifier proj1)
+> HEAD is now at 92574c5 starting analysis
+
+looks interesting:
+	git submodule foreach git rev-parse --git-dir --show-toplevel
+
+
+Testing
+-------
+
+Make changes to shared proj1:
+
+	cd ~/subtest/mac/proj1/script
+	echo "change 1" >> rs.R
+	cd ..
+	git add .
+	git commit -m "change 1"
+	git push
+	
+Back to the lib1:
+
+	cd ~/subtest/mac/lib1
+	git status
+	
+It does not show that there are new commit on proj1. Bad.
+
+Trying to merge to the new branch:
+
+	cd ~/subtest/mac/proj1
+	git checkout lib1
+	
+it fails.... funny.
+and again:
+
+	cd ~/subtest/mac/lib1/proj1
+	git branch
+	
+we have both... and lib1 is checked out.
+that's why. so:
+	git checkout master
+
+it fails. So both branches are already checked out, but in different directories...
+
+So, let's merge here.
+
+	git merge master
+
+
+and it worked.
+
+checking:
+	git worktree list
+
+	cd ~/subtest/mac/proj1
+	git worktree list
+	
+the same.
+
+
+Pruning:
+
+	cd ~/subtest/mac/proj1
+	git worktree prune
+	git worktree list
+
+everything is still there. Again,
+
+	cd ~/subtest/mac/lib1
+	rm -rf proj1
+	
+	cd ~/subtest/mac/proj1
+	git worktree prune
+	git worktree list
+
+Now it is gonne. But `git status` will be Ok in proj1, but not in lib1.
+	cd ~/subtest/mac/lib1
+	git status
+
+
+Solution 3 - link + edit .git file
+==================================
+
+based on https://stackoverflow.com/a/45768462/7774591
+and starting from end of "Init" section above.
+
+The first step in the answer says "assuming both project1 and project2 have library_XYZ already
+added as a submodule, and that currently all three projects contain a full checkout of library_XYZ."
+let's do it for our case:
+
+
+	cd ~/subtest/linux/proj1
+	git submodule add ~/subtest/github/lib1.git
+	git submodule init
+	git commit -m "added lib1 submodule"
+	git push
+
+To make things simpler, let's keep working in the "linux" machine. 
+
+
+Step 2, replacing the full checkouts of the library submodules by a shared symlink to the library's
+checkout (in the original answer it's first checked that there is no uncommited/unpushed changes,
+skiping this here)
+
+
+	cd ~/subtest/linux/proj1
+	
+Get rid of submodule's check-out:
+
+	git submodule deinit lib1
+	
+as well as of its local repository:
+
+	rm -rf .git/modules/lib1 
+
+	mkdir -p .submods
+	git mv -- lib1 .submods/
+	echo "gitdir: /Users/itaraju/subtest/linux/lib1/.git" > .submods/lib1/.git
+	ln -s ~/subtest/linux/lib1 lib1
+	echo "/lib1" >> .gitignore
+
+(below, with "Changing a bit" we get the same result, but testing the code:)
+
+Trying the original code:
+
+	sharedproject="/Users/itaraju/subtest/linux/lib1"
+	superproject="/Users/itaraju/subtest/linux/proj1"
+	submodule="lib1"
+	cd "$superproject"
+	(cd -- "$submodule" && git status) # Verify that no uncommited changes exist!
+	(cd -- "$submodule" && git push -- "$sharedproject") # Save any local-only commits
+	git submodule deinit -- "$submodule" # Get rid of submodule's check-out
+	rm -rf .git/modules/"$submodule" # as well as of its local repository
+	mkdir -p .submods
+	git mv -- "$submodule" .submods/
+	echo "gitdir: $sharedproject.git" > ".submods/$submodule/.git"
+	ln -s -- "$sharedproject" "$submodule"
+	echo "/$submodule" >> .gitignore
+
+A similar fatal: fatal: Not a git repository: /Users/itaraju/subtest/linux/lib1.git
+
+
+Changing a bit:
+
+	sharedproject="/Users/itaraju/subtest/linux/lib1"
+	superproject="/Users/itaraju/subtest/linux/proj1"
+	submodule="lib1"
+	cd "$superproject"
+	(cd -- "$submodule" && git status) # Verify that no uncommited changes exist!
+	(cd -- "$submodule" && git push -- "$sharedproject") # Save any local-only commits
+	git submodule deinit -- "$submodule" # Get rid of submodule's check-out
+	rm -rf .git/modules/"$submodule" # as well as of its local repository
+	mkdir -p .submods
+	git mv -- "$submodule" .submods/
+	echo "gitdir: $sharedproject/.git" > ".submods/$submodule/.git"
+	ln -s -- "$sharedproject" "$submodule"
+	echo "/$submodule" >> .gitignore
+
+
+Now it looks different, no fatal, but stuff to commit exists.
+
+
+	git add .
+	git commit -m "shared lib1"
+	git push
+
+
+Answer says "Once you already have that layout committed, check out the superproject somewhere (...)". Trying it:
+
+	cd ~/subtest/linux
+	git clone ~/subtest/github/proj1.git ./proj2
+	cd proj2
+
+and continuing "(...), go to its top-level directory, and do the following in order to enable
+sharing:"
+
+	sharedproject="/Users/itaraju/subtest/linux/lib1"
+	submodule="lib1"
+	ln -sn -- "$sharedproject" "$submodule"
+	echo "gitdir: $sharedproject/.git" > ".submods/$submodule/.git"
+
+or (the same result:)
+
+	ln -s /Users/itaraju/subtest/linux/lib1 lib1
+	echo "gitdir: /Users/itaraju/subtest/linux/lib1/.git" > .submods/lib1/.git
+
+
+It looks, here, the same as in ../proj1, good. 
+Checking status:
+
+	git submodule status
+	git submodule summary
+	cd ../proj1
+	git submodule status
+	git submodule summary
+
+Same output. The submodules are pointing out to the same commit in the lib1 project.
+SHA-1 of the commits started with "-", which tells the submodules are not initialized.
+
+
+Let's change the lib1 and check how to use the setup.
+
+	cd ~/subtest/linux/lib1
+	echo "e f g h" >> dt.csv
+	git commit -a -m "change 1"
+	git push
+	
+In the projs:
+	
+	cd ~/subtest/linux/proj1
+	cat lib1/dt.csv
+	cd ../proj2
+	cat lib1/dt.csv
+	
+	cd ../proj1
+	git submodule status
+	cd ../proj2
+	git submodule status
+
+The new content is there, but the submodule is still pointing to the old commit.
+
+Let's add a commit:
+
+	cd ~/subtest/linux/proj2
+	git add .submods/lib1
+	git commit -m "new commit in lib1"
+	git submodule status
+	
+Now we got the new commit from lib1. Here we have proj1 and proj2 pointing
+to different lib1 commits. Let's delay the push and try it out:
+
+	cd ~/subtest/linux
+	git clone ~/subtest/github/proj1.git ./proj3
+	cd proj3
+	git submodule status
+
+Ok, as expected, it has the old commit from lib1. Let's apply the push and try again:
+
+	cd ../proj2
+	git push
+	
+	cd ~/subtest/linux
+	rm -rf proj3
+	git clone ~/subtest/github/proj1.git ./proj3
+	cd proj3
+	git submodule status
+
+Ok, now it has the new commit from lib1. So far so good.
+
+
+Let's test this part of the answer: "But if another person does nothing special and just checks out
+project1 and does a normal "git submodule update --init library_XYZ", things will work the same
+without a shared check-out."
+
+	
+	cd ~/subtest/linux
+	rm -rf proj3
+	git clone ~/subtest/github/proj1.git ./proj3
+	cd proj3
+	git submodule init
+	git submodule update
+
+The subproject is checked out in .submods/lib1, so probably it's advisable:
+
+	ln -s .submods/lib1 .

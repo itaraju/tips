@@ -1,0 +1,12 @@
+To install Windows TrueType fonts, open a terminal and become root again:
+
+su
+
+Then run:
+
+cd /tmp/
+wget http://corefonts.sourceforge.net/msttcorefonts-2.0-1.spec
+yum -y install rpm-build cabextract ttmkfdir
+
+rpmbuild -bb msttcorefonts-2.0-1.spec
+rpm -ivh /root/rpmbuild/RPMS/noarch/msttcorefonts-2.0-1.noarch.rpm --nodeps

@@ -1,0 +1,61 @@
+the VM
+======
+
+https://spins.fedoraproject.org/lxde/download/lxde-download-splash?file=https://download.fedoraproject.org/pub/fedora/linux/releases/25/Spins/x86_64/iso/Fedora-LXDE-Live-x86_64-25-1.3.iso
+
+
+
+linux 64
+4Gb ram
+sata wombat.vdi 10Gb
+
+
+booting onto text mode
+======================
+
+Permanently Set a Default Runlevel:
+Open a Terminal.
+Become root:
+su -
+
+Open the file /etc/inittab in your favorite text editor:
+gedit /etc/inittab
+
+Find the line:
+id:number:initdefault:
+
+where number is your current default runlevel (probably 5).
+
+Change the number in the middle of the line to the new runlevel that you want your computer to start in by default. For example, if you want to start in text-only mode by default, change it to:
+id:3:initdefault:
+
+You will then boot into that runlevel every time you start the computer.
+
+
+
+install Virtualbox guest additions on Fedora
+============================================
+
+(http://www.binarytides.com/vbox-guest-additions-fedora-20/)
+more on: https://forums.virtualbox.org/viewtopic.php?t=15679
+
+https://www.virtualbox.org/manual/ch04.html#idm1948
+
+
+dnf/yum  install kernel-devel kernel-headers dkms gcc gcc-c++
+
+
+/etc/fstab:
+tmpshare	/mnt/tmp	vboxsf	uid=itaraju,rw,defaults,nofail
+
+
+
+
+
+fedora booting into emergency mode:
+===================================
+(https://forums.virtualbox.org/viewtopic.php?f=3&t=49940)
+
+> After reading A LOT on the issue, I found some posts for Fedora 16 stating that a problem with mounting the /home partition was the cause of the dependency failure. I added "nofail" to the options in /etc/fstab after "defaults" and it works like a charm now. Hope this helps someone else in a similar spot.
+
+> It turns out, I had added a line to my /etc/fstab to auto-mount one of my Virtualbox shared folders. By upgrading the kernel, I (obviously) lost the kernel module that mount relies on, and so it was forcing the emergency mode message. By adding nofail to the options, it allows me to boot, install the guest additions, and reboot. No more emergency mode!

@@ -1,0 +1,14 @@
+Batch image convertion / processing
+-----------------------------------
+
+For example the following command would resize all .jpg images in a directory to 640x480, with quality setting 86 (you can choose between 0 and 100) and strip EXIF data from them to make files even smaller:
+
+find . -iname "*.jpg" -exec convert -resize 640x480 -quality 86 -strip {};
+
+There's actually a nice Nautilus extension (that uses Imagemagick) in Ubuntu repositories that allows you to just select all images you want to resize, right-click, select 'Resize Images' and choose the size you want from a GUI menu. To get it run the following command and log out &back again (or 'killall nautilus'):
+sudo apt-get install nautilus-image-converter
+
+
+----------------------
+opção para scala, sem especificar a resolucao final:
+convert file1.jpg -scale 25% file-final.jpg

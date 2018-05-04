@@ -1,0 +1,55 @@
+## compiling
+
+- example 1
+
+pandoc Untitled.utf8.md --to latex --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash-implicit_figures 
+
+--output Untitled.pdf --template /Library/Frameworks/R.framework/Versions/3.1/Resources/library/rmarkdown/rmd/latex/default.tex --highlight-style tango --latex-engine /usr/texbin/pdflatex --variable 'geometry:margin=1in' 
+
+
+- example 2
+
+pandoc Untitled.utf8.md --to docx --from markdown+autolink_bare_uris+ascii_identifiers+tex_math_single_backslash-implicit_figures 
+
+--output Untitled.docx --highlight-style tango
+
+
+
+## Adding extentions to YAML section
+ (http://rmarkdown.rstudio.com/pdf_document_format.html#markdown_extensions):
+
+
+    md_extensions: +footnotes
+	
+	
+## includes (also: landscape/portrait pages)
+(https://stackoverflow.com/questions/25849814/rstudio-rmarkdown-both-portrait-and-landscape-layout-in-a-single-pdf)
+
+---
+title: "Mixing portrait and landscape WITHOUT a header.tex file"
+header-includes:
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
+output: pdf_document
+---
+
+## printr (nicer printing of objects in knitr)
+https://yihui.name/printr/
+
+for simple printing, but making it better looking. Kind of automatic wraps tables into kable()
+
+
+also:
+
+http://stackoverflow.com/questions/18965637/ddg#18967590
+https://yihui.name/knitr/hooks/
+knit_hooks$set(inline = function(x) {
+  prettyNum(x, big.mark=" ")
+})
+
+## refs
+
+https://github.com/tomduck/pandoc-eqnos 
+https://github.com/tomduck/pandoc-fignos 
+https://github.com/tomduck/pandoc-tablenos

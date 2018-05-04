@@ -1,0 +1,194 @@
+Navigation [3, 4, 6]
+--------------------
+
+[count]b/e/w - move backwards/end word/start next word
+[count]ge,gE - end of back word
+
+Text objects / Noums:
+w - word
+s,) - sentence
+p,} - paragraph
+" - quote
+t - tag
+b - block
+w,W noums: small word, big word, e.g. diw/diW
+
+Parameterized Text objects
+i<move> inside
+a<move> around
+f,F - find next character
+t,T - find up to
+;/, finds again forward/backward
+
+m<letter> mark to letter - if uppercase then it's Global bookmark
+`<letter> - "noum" go to mark
+'<letter> - "noum" go to line of mark
+:marks - show the marks
+'' to the position before last jump
+
+n% go to line n %
+L lower line in the screen
+M middle
+H higher line
+
+zz,z. center screen at current line
+zt,zb top, bottom
+C-d, C-u half screen Down/Up
+C-f, C-b full scree Forward/Backward
+C-e,C-y scrool one line up/down
+
+0,^,g_,$ line navigation   
+* search the current word
+
+[linha]G -goto-line
+G - toto-eof
+gg - goto-bof
+
+Editing
+------------------------------------------------------
+
+vi verbs:
+d delete
+c change
+y yank
+v visually select 
+
+Others:
+r - replace one caracter
+R - in overwrite mode
+c-R - redo
+p,P - put below/up
+yy - yank line
+J - join cuurent line with next one
+o,O - abrir linhas abaixo/acima
+
+c-a,c-x increade,decrease numbers (normal mode)
+
+c-o enable normal mode commands in insert mode
+:normal in visual mode, enable to run normal model commands
+
+Search / replace
+------------------------------------------------------
+
+/ - busca a frente
+? - busca a tras
+/<busca\c - ignorar case
+c-o, c-i :volta para posições
+n - search again
+N - search again backwards
+% - search matching parentesis	
+
+:#,#s/old/new/g    line range: #,#
+:%s/old/new/g      to change every occurrence in the whole file.
+:%s/old/new/gc     to find every occurrence in the whole file,
+                   with a prompt wether to substitute or not.
+
+
+Formating [1]
+-------------------------------------------------------
+
+zf - verb fold text
+zo - fold open
+zc - fold close
+:4,10fo - fold lines 4 to 10
+zd delete fold
+zM close all folds (zm: close more)
+zR open all folds (zr: open more)
+[z,]z move to start,end of current foldo
+zj,zk move to down,up fold
+
+= - verb to ident
+> - verb to increase identation
+< - verb to decrease identation
+
+gq,gw{motion} - format motion (also visual). Keep cursor if 'w' (handy: set textwidth)
+gqq,gqgq,gwgw,gww - same, for line
+
+:Explore - file browser
+:[SV]Explore - explore with split screen
+
+Buffers - windows
+------------------------------------------------------
+
+:bd - delete buffer
+:new
+:only
+:close
+
+:tabedit <arquivo>
+:tab split - cria tab do mesmo arquivo
+gt - goto tab
+
+:split/vsplit <arquivo>
+vim -0 [arq1] .. [arqn] 
+c-w [+/-] resize height
+c-w [<>] resize width
+c-w w jump to another window
+c-w h/j/k/l jump to window on [count] h/j/k/l position
+
+*** diff mode
+iniciar com: $vi -d <arq1> ... <arqn>
+:set diffopt=icase: ignorar case
+
+External commands [2]
+--------------------------------------------------------------
+
+:! <cmd> - run through shell command, if visual, filtering selection
+:10,15 ! <cmd> - filter lines 10 to 15
+:! wc %  - run wc on current file
+:r ! cmd  - read command output
+:r <file> insert file
+
+Auto completion [1, 3, 5]
+----------------------------------------------------
+"<register> selects register (e.g., then y or p)
+:let @<register>="value"
+a-z,A-Z: named registers
+. (special register) last inserted text
+0 (special register) last yanked text
+
+All in insert mode:
+
+C-r pick registers
+C-a last instered text, same as C-r .
+c-@ same as c-a<esc> to exit imode
+c-y repeat character from line above
+c-k enter digraphs, check: :digraphs
+c-o {command} executes command in normal mode
+
+C-p complete with Previous text
+C-n complete with next text
+
+C-x goto Completion mode, then:
+ C-] use ctags to complete
+ C-f complete with file name
+ C-p previous, but context sensitive (from last completion)
+ C-n the same, pulling from something that exists after where the cursor is
+ C-l for the line, context awere (can repeat)
+ C-o omni completetion (from language)
+ C-k words from a dictionary
+
+set complete= check that it has k/kspell (kspell, only completes from dic if set spell)
+
+Spell checking
+--------------
+set spellang=en_us pt_br
+
+[s,]s previous,next misspeled word
+z= get suggesting for word
+zg mark misspeled word as correct
+zw mark good word as misspeled
+
+Other
+------------
+ctags: [5, 4]
+
+References
+==========
+
+[1] https://medium.freecodecamp.org/learn-linux-vim-basic-features-19134461ab85
+[2] https://www.linux.com/learn/vim-tips-working-external-commands
+[3] https://youtu.be/3TX3kV3TICU - Let Vim do the typing
+[4] https://youtu.be/Qem8cpbJeYc - Vim Navigation Commands
+[5] video no-plugins
+[6] https://youtu.be/wlR5gYd6um0 - Mastering the Vim language ("Never hit a ceiling")

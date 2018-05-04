@@ -1,0 +1,52 @@
+programa: flipboard
+===================
+
+http://www.mactricksandtips.com/2008/01/top-100-essential-mac-applications.html
+
+http://www.obdev.at/products/littlesnitch/index.html
+
+http://www.neooffice.org/neojava/en/index.php
+
+
+command line tips
+=================
+
+https://www.infoworld.com/article/2614879/mac-os-x/mac-os-x-top-20-os-x-command-line-secrets-for-power-users.html?page=2
+
+
+trackpad stuff:
+===============
+http://www.guidingtech.com/34353/re-enable-mavericks-features/
+
+
+again on macOS (Sierra)
+http://apple.stackexchange.com/questions/180620/enabling-both-trackpad-drag-lock-and-3-finger-drag-at-once
+
+- now impossible to get both three finger drag, and click drag at the same time. 
+- did and worked:
+
+defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool true
+
+Keyboard
+========
+emoji shortcut: CTRL+Command+Space
+
+show/hide Help: Cmd-Shift-/ 
+[this also shows the menu, nice with auto-hide menu: https://www.reddit.com/r/osx/comments/3n9hqj/is_there_any_keyboard_shortcut_to_toggle_menu_bar/]
+
+
+Folder Actions
+==============
+
+on spotlight: "Folder Actions Setup"
+it's an actual application, just not listed on LaunchPad
+
+New Safari Window
+=================
+https://superuser.com/a/725826
+
+tell application "Safari"
+    make new document
+    activate
+end tell
+

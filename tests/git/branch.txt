@@ -1,0 +1,88 @@
+Testing branching - only local
+
+
+Creating everything:
+
+	mkdir ~/Projects/test
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+
+Branching & Adding Changes
+
+	git checkout -b br1	
+	echo "file2" > b.txt
+	echo "ch1" >> a.txt
+	git add b.txt
+	git commit -a -m "change1"
+	git tag chg1
+
+Changes to master
+
+	git checkout master
+	echo "file3" > c.txt
+	echo "ch2" >> a.txt
+	git add .
+	git commit -m "change2"
+	git tag chg2
+
+Viewing:
+
+	git log --oneline --graph --all
+
+Merging to br1
+
+	git checkout br1
+	git merge master
+
+There are conflicts in a.txt. Solve then:
+
+	vi a.txt
+	git add a.txt
+	git commit
+
+Viewing:
+
+	git log --oneline --graph --all
+
+Adding a new change to br1 (but none to master)
+
+	git checkout br1
+	echo "ch3" >> a.txt
+	echo "ch3" >> b.txt
+	echo "ch3" >> c.txt
+	git add .
+	git commit -m "change3"
+	git tag chg3
+
+Viewing:
+
+	git log --oneline --graph --all
+
+Merging those new changes back to master
+
+	git checkout master
+	git merge br1
+(it was a fast-forward, cool)
+(notice that if in the first merge, the conflict had been solved by
+removing both lines "ch1" and "ch2" from a.txt, it would still be a fast-forward here.)
+
+Viewing:
+
+	git log --oneline --graph --all
+
+No difference:
+
+	git diff --stat master..br1
+	
+
+Deleting branch br1
+
+	git branch -d br1
+
+By deleting, we don't see any reference to br1 in the log:
+
+	git log --oneline --graph --all
+

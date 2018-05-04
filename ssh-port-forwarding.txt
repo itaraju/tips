@@ -1,0 +1,24 @@
+# Remote server as SOCKS proxy (set up it in Network Preferences)
+ssh -D 8080 -C -N itaraju@bio3
+
+(proxy server at 127.0.0.1:8080)
+
+
+
+# Port forwarding to specific server/port:
+ssh -C -N -L 8787:127.0.0.1:8787 bio3r
+
+(just point to localhost:8787) 
+
+
+# Options descriptions:
+-C compress data
+-N do not execute any command on server side
+-L Specifies that the given port on the local (client) host is to be
+   forwarded to the given host and port on the remote side.  
+
+
+
+##### current uses
+ssh -C -L 8787:127.0.0.1:8787 bio3r
+ssh -C -L 8787:srv-bio4:8787 bio3r

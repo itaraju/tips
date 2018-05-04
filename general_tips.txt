@@ -1,0 +1,92 @@
+Trocando lyric por txt, nos nomes de todos arquivos numa árvore de diretório:
+find . -type f -name "*lyric" | sed -e "s%\(.*/[^/]*\)lyric\([^/]*\)%mv \"\0\"\"\1txt\2\"%" >/tmp/$$; wc -l /tmp/$$; . /tmp/$$
+
+- Search 'expr' in this dir and below:
+find -name '*.[ch]' | xargs grep -E 'expr'
+
+---
+dealing with white-spaces in names, using find/xargs:
+find -iname 'pattern' |xargs -I{} rm {}
+
+similar:
+ find ~/gs-v1/ -iname '._*' |xargs -I{} rm -v {}
+
+---
+Replacing underlines with spaces on all files within a directory
+    for f in `ls -1 *_*`; do mv "$f" "$(echo "$f" | sed "s/_/ /g")"; done
+
+retornar colunas separadas por ' '
+awk -F ' ' '{print $1}' 
+
+tentar:
+perl -F" " -nae 'print "$F[1] \n";' < t
+
+retirar aspas simples de começo ou fim de linhas:
+perl -ne 'chomp; $_=substr($_,1) if /^'\''/; chop if /'\''$/; print "$_\n";'
+
+obter colunas por posição:
+cut
+
+-- netstat --
+portas em listem:
+netstat -lpt
+
+conexoes para fora:
+netstat -pt
+
+ambas (todas conexoes):
+netstat -apt
+--
+
+trabalhar com grande quantidade de arquivos ao mesmo tempo, número que impede
+a expansão de linha de comando do bash:
+echo *|xargs rm
+
+argumentos aterm:
+aterm -tr -sh 80 -fg white -bg blue +sb -vb   -geometry 83x11+694+850 -e ssh -C proteome
+
+-- PDF
+extração de páginas:
+$ pdftops afile.pdf - | psselect -p11-14 | ps2pdf - file-p11-14.pdf
+ou
+$ pdftk A=afile.pdf cat A11-14 output file-p11-14.pdf
+
+merging:
+psmerge
+
+$ pdftops file1.pdf 
+$ pdftops file2.pdf
+$ psmerge file1.ps file2.ps | ps2pdf - finalfile.pdf
+$ rm file1.ps file2.ps
+
+para merge de vários arquivos:
+$ for f in `ls *.pdf`; do pdf2ps "$f"; done
+$ echo *.ps|xargs psmerge -ofinalfile.ps #não funcionou este
+
+Alternativa:
+pdfjam
+
+--- Alerta via notify-send (from:http://wagiaalla.com/2007/06/06/notify-send/)
+alias saydone='notify-send "Done! `if [ \$? = 0 ]; then echo \:\); else echo \:\(; fi`"'
+
+
+---
+wget - directory structure
+
+$ wget -r -l1 -A.bz2 http://aaa.com/directory
+
+-A: accept
+-R: reject
+
+---
+run bash without history (http://stackoverflow.com/questions/8473121/execute-command-without-keeping-it-in-history#8473153)
+
+in any given bash session, set the history file to /dev/null by typing:
+
+export HISTFILE=/dev/null
+
+
+-- acessing clibboard to/from stdin/stdot
+pbcopy
+pbpaste
+

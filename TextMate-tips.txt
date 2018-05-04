@@ -1,0 +1,101 @@
+http://hiltmon.com/blog/2014/01/20/more-textmate-2-basics/
+http://hiltmon.com/blog/2013/11/09/textmate-2-basics/
+http://www.macdevcenter.com/pub/a/mac/2007/04/11/customizing-textmate.html
+
+- themes bundle:
+~/Library/Application\ Support/TextMate/Managed/Bundles/Themes.tmbundle
+~/Library/Application\ Support/TextMate/Bundles
+
+- duplicate line
+shift-^D: 
+
+- switch between the editor and the File Browser:
+option-cmd-tab
+
+- jump to selection
+cmd-J
+
+- find all (and adds multiple caret), works within selection if so
+option-cmd-F
+
+- find history
+^-option-cmd-F
+
+- clipboard history
+^-option-cmd-V
+
+- Extend Selection to Include Next (⌃W) [cool]
+^W
+
+- select enclosing typing pairs
+shift-cmd-B
+
+- select paragraph
+shift-cmd-P
+
+- move begin/end pair {},()[] ...
+^up/down
+
+- select begin/end pair
+^-shift-down/up
+
+- show scope of the caret:
+^-shift-P
+also goes to $TM_SCOPE
+
+Hello world snippet:
+Hello ${1|world,universe|}
+
+- integration with RMarkdown
+bundle: https://github.com/streeter/markdown-redcarpet.tmbundle
+added menu "knit this" to markdown-redcarpet bundle: with code from: https://github.com/yihui/knitr/issues/252#issuecomment-6034068
+had to create symbolic links in /usr/local/bin to: pdflatex and pandoc-citeproc
+
+- new menu (edit bundle Markdown-RedCarpet):
+Name: Insert R block
+scope: text.html.markdown.redcarpet
+Tab Trigger: R
+content:
+\`\`\`{r ${1:block}${2|\, cache=TRUE,,\, fig.cap="",\, results='asis'|}}
+${3:code}
+\`\`\`
+
+- new menu (edit bundle Markdown-RedCarpet):
+Name: Insert inline R
+scope: text.html.markdown.redcarpet
+Tab Trigger: r
+content:
+\`r ${1:code}\`
+
+
+Improvements to Markdown-RedCarpet todo:
+----------------------------------------
+
+- set color to equations: block: $$ ... $$, inline: $..$ (maybe even: synthax highlight inside)
+- set color to references: [@ref], @ref, {#ref}, {@ref}
+- set background color to code blocks
+- index code blocks in symbols list (shift-cmd-T)
+- insert code block: include {}
+- help R command
+
+Done with edit bundle
+---------------------
+
+
+
+```{r ${1:block}}
+
+```
+
+Edit bundle R
+-------------
+
+- edit menu action (to use comma as separator too): Vector/Matrix/Create Vector from Selection:
+Added at line 6:
+text.gsub!(/,/," ")
+
+It was added in between the lines:
+5: text.gsub!(/(^\s+|\s+$)/,"")
+6: text.gsub!(/\s{1,}/," ")
+
+

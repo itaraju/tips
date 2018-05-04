@@ -1,0 +1,34 @@
+Init
+----
+
+
+Creating structre:
+
+	mkdir ~/Projects/ignoretest
+	cd !$
+	mkdir folder1
+	mkdir -p folder2/subfolder
+
+Creating content
+
+	cd ~/Projects/ignoretest
+	echo "main" > readme.txt
+	echo "a b c d" > folder1/dt1.csv
+	echo "keep this" > folder2/readme.txt
+	echo "e f g h" > folder2/dt2.csv
+	echo "i j k l" > folder2/subfolder/dt3.csv
+
+Ignore file:
+
+	echo "folder2/*" > .gitignore
+	echo '!folder2/readme.txt' >> .gitignore
+
+check:
+
+	find .
+
+Initializing git:
+
+	git init
+	git add .
+	git ls-files --cached

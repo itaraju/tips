@@ -1,0 +1,195 @@
+Testing idea from: https://stackoverflow.com/questions/3168370/git-how-to-move-some-commits-to-new-branch
+
+Scenario (from Stackoverflow post)
+
+I have been working in straight line:
+
+A---B---C---D---E---F (master:HEAD)
+Now I want to move backward:
+
+git checkout C
+and move few last commits to a new branch:
+
+Option 1:
+
+          D---E---F (new:HEAD)
+         /
+A---B---C (master)
+
+
+
+- Question to test: will it work if tree had been already pushed to server?
+
+
+Setting up history
+------------------
+
+Creating everything:
+
+	mkdir ~/Projects/test
+	cd !$
+	mkdir github
+	mkdir client
+	mkdir projx
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+
+Initializing github (server) and pushing up
+	
+	git clone --bare . ~/Projects/test/github/projx.git
+	git remote add origin ~/Projects/test/github/projx.git
+	git config branch.master.remote origin
+	git config branch.master.merge refs/heads/master
+
+Cloning to client, from github
+
+	cd ~/Projects/test/client
+	git clone ~/Projects/test/github/projx.git
+
+Adding Changes
+
+	cd ~/Projects/test/projx
+	echo "file2" > b.txt
+	echo "ch1" >> a.txt
+	git add b.txt
+	git commit -a -m "change1"
+	git tag chg1
+
+	echo "file3" > c.txt
+	echo "ch2" >> a.txt
+	echo "ch2" >> b.txt
+	git add c.txt
+	git commit -a -m "change2"
+
+	echo "file4" > d.txt
+	echo "ch3" >> a.txt
+	echo "ch3" >> b.txt	
+	echo "ch3" >> c.txt	
+	git add d.txt
+	git commit -a -m "change3"
+	
+	git push
+	cd ~/Projects/test/client/projx
+	git pull
+	
+
+Testing section
+---------------
+
+Make a 'new' branch pointing at HEAD, which is F:
+
+	cd ~/Projects/test/projx
+	git branch new
+
+Move master back to point at C (change 1):
+
+	git reset --hard chg1
+
+Make HEAD follow new, and get F in the working tree:
+
+	git checkout new
+	git push --set-upstream origin new
+
+(on last command, maybe --track option for git branch would be helpful)
+
+	git push
+
+(rejected)
+
+
+Alternative test
+----------------
+
+based on https://stackoverflow.com/questions/8493898/rebranch-previous-commits-in-git?noredirect=1&lq=1
+
+with the same setup as before, now:
+
+	cd ~/Projects/test/projx
+	git checkout -b new_branch
+	git push . +head~2:master
+
+Ok, it looks to have the same effect as in the previous section.
+But:
+
+	git push
+
+fails, and:
+
+	git push --all
+
+also fails.
+
+Conclusion:
+It looks it's a good idea to always branch when starting a new set of changes, if they are going to be pushed.
+
+Another approach (this worked)
+------------------------------
+
+Let's keep the master branch intact (already pushed to server). 
+But create a new branch out of old commit to start new history, to see if works. 
+In diagram:
+
+A---B---C---D---E---F (master:HEAD)
+Now I want to move backward:
+
+
+          G---H---I (new:HEAD)
+         /
+A---B---C---D---E---F (master:HEAD)
+
+
+Continuing after initial setup, create the new branch:
+
+	cd ~/Projects/test/projx
+	git branch new chg1
+	git checkout new
+
+Adding more changes:
+
+	echo "file5" > e.txt
+	echo "ch4" >> d.txt
+	git add .
+	git commit -m "change4"
+
+check:
+	git log --oneline --all --graph
+
+push:
+	git push --set-upstream origin new
+
+It is also possible to `git push --all`, but origin will not be set, 
+and the `pull` bellow will be required to specify `origin new`.
+Check differences with `git config -l`.
+
+On the other side:
+	cd ~/Projects/test/client/projx
+
+this actually works:
+	<!--
+	git pull
+	git checkout new -->
+
+but, preferable:
+	git fetch
+	git checkout -b new --track origin/new
+
+changes:
+	echo "chg5" >> e.txt
+	git commit -a -m "change5"
+
+check:
+	git log --oneline --all --graph
+	
+move on:
+	git push
+	cd ~/Projects/test/projx
+	git pull
+
+
+
+Finalizing:
+	cd ~/Projects
+	rm -rf test/

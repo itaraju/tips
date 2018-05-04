@@ -1,0 +1,57 @@
+Init:
+
+	cd ~/Projects
+	mkdir test
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+
+Change 1
+
+	echo "file2" > b.txt
+	echo "ch1" >> a.txt
+	git add b.txt
+	git commit -a -m "change1"
+
+Change 2
+
+	echo "file3" > c.txt
+	echo "ch2" >> a.txt
+	echo "ch2" >> b.txt
+	git add c.txt
+	git commit -a -m "change2"
+
+Change 3
+
+	echo "file4" > d.txt
+	echo "ch3" >> a.txt
+	echo "ch3" >> b.txt	
+	echo "ch3" >> c.txt	
+	git add d.txt
+	git commit -a -m "change3"
+
+log:
+
+	git log --oneline
+
+Reseting to "Change 1" commit: files remain the way they were after "change 3"
+
+	git reset ebdaaa8
+
+And c.txt and d.txt are untracked now.
+
+Committing changes back:
+
+	git add .
+	git commit -m "added back"
+
+log:
+
+	git log --oneline
+
+Reseting to "Change 1" commit, not preserving the working tree: files go back to what they were after "Change 1" commit:
+
+	git reset --hard ebdaaa8
+

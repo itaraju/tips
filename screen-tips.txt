@@ -1,0 +1,14 @@
+refs: 
+http://aperiodic.net/screen/region_management
+http://aperiodic.net/screen/quick_reference
+
+screen
+split display horizontally	C-a S
+split display vertically	C-a | or C-a V (for the vanilla vertical screen patch)
+jump to next display region	C-a tab
+remove current region	C-a X
+remove all regions but the current one	C-a Q
+
+to resize region, use resize command, like:
+C-a :
+then type resize [#lines]

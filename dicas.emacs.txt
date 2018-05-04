@@ -1,0 +1,34 @@
+M-x xterm-mouse-mode
+M-x t-mouse-mode
+
+http://www.inf.ufrgs.br/~mario/doc/emacs/node13.htmli
+http://www.pcs.usp.br/~jkinoshi/bs/
+
+Alguns hot-keys
+
+M-x R	iniciar Emacs Speaks Statistcs (ESS)
+C-u M-x R	so ESS prompts for "Starting Args ? "
+C-c C-q	encerrar execução do R
+
+C-x b	mudar de buffer para a "janela" atual
+C-x 1	uma "janela"
+C-x 2	duas "janelas"
+C-x 3	três "janelas"
+C-x o	pular entre "janelas"
+
+C-x k	kill current buffer
+C-x C-c	close emacs
+
+C-_	undo
+M-<	início do buffer
+M->	fim do buffer
+
+C-M-b / C-M-f Jump to parenthesis
+
+C-h a	help, search for command
+
+M-%	search/replace
+
+ESS:
+M-h	selecionar região do comando atual, com seu output
+(ess-toggle-underscore nil) ; leave my underscore key alone! http://www.r-bloggers.com/a-small-customization-of-ess/

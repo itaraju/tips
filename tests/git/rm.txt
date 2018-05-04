@@ -1,0 +1,39 @@
+Init:
+
+	cd ~/Projects
+	mkdir test
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+
+Adding another file
+
+	echo "file2" > b.txt
+	echo "ch1" >> a.txt
+	git add b.txt
+	git commit -a -m "change1"
+
+Checking files - the commits differ
+
+	git ls-tree HEAD^
+	git ls-tree HEAD	
+
+Change - removing a.txt on next commit
+
+	git rm a.txt
+	echo "ch2" >> b.txt
+	git add b.txt
+	git status
+	git commit -m "removed a.txt, more changes"
+
+Checking files again (3 commits present now):
+
+	git ls-tree HEAD^^
+	git ls-tree HEAD^
+	git ls-tree HEAD
+
+Content still present in history:
+
+	git show HEAD^:a.txt

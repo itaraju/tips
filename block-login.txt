@@ -1,0 +1,16 @@
+1) (redhat)
+
+- have in following line  /etc/pam.d/sshd :
+ account    required     pam_access.so
+ 
+- add to /etc/security/access.conf:
+ -:<user-name-to-restrict>:ALL
+ 
+2) lock user
+# passwd  -l <user>
+
+3) in /etc/passwd, change terminal to /bin/nologin or /sbin/nologin
+
+4) in /etc/ssh/sshd_config add:
+DenyUsers <user1> <user2>
+

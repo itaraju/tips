@@ -1,0 +1,34 @@
+JAVA on mac
+==========
+
+Problem:
+———————
+
+
+Some application doesn’t work complaint about java version.
+
+Command java -version, gives:
+
+java version "1.6.0_65"
+Java(TM) SE Runtime Environment (build 1.6.0_65-b14-462-11M4609)
+Java HotSpot(TM) 64-Bit Server VM (build 20.65-b04-462, mixed mode)
+
+
+On Mac System preferences -> java -> Update tab we get
+Yer system has the recommended version of Java
+Java 7 update 55
+
+Solution:
+—————————
+
+from: 
+http://stackoverflow.com/questions/12757558/installed-java-7-on-mac-os-x-but-terminal-is-still-using-version-6
+
+we get:
+https://gist.github.com/johan/10590467
+
+and then, I did:
+
+sudo mv /usr/bin/java /usr/bin/java-1.6
+sudo ln -s '/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java' /usr/bin/java
+

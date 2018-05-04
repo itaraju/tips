@@ -1,0 +1,344 @@
+some sources: 
+http://nyuccl.org/pages/GitTutorial/
+https://git-scm.com/docs/gittutorial-2
+https://git-scm.com/book/en/v2/Git-Tools-Submodules
+https://opensource.com/life/16/7/how-restore-older-file-versions-git
+
+keeping history clean:
+https://spin.atomicobject.com/2017/04/23/maintain-clean-git-history/
+
+interesting question about submodules:
+https://softwareengineering.stackexchange.com/questions/114719/organizing-git-repositories-with-common-nested-sub-modules
+
+Configs
+-------
+
+- Turn on color
+git config --global color.ui "auto"
+
+- Your signature
+git config --global user.name "Your Name"
+git config --global user.email "your.email@nyu.edu"
+
+- Your editor
+git config --global core.editor "mate -w"
+
+- Checking configurations
+git config -l
+
+- making followtags default on pushes:
+git config --global push.followTags true
+
+- using opendiff in `git difftool`
+git config --global diff.tool opendiff
+git config --global --add difftool.prompt false
+
+- using opendiff in `git mergetool`
+git config --global merge.tool opendiff
+
+Adding repository
+-----------------
+
+- new key
+ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+
+- new repo on github. Create the repo on github, then:
+git remote add origin git@github.com:johnmcdonnell/demo.git
+git push -u origin master 
+
+- initiating a new bare repo, on remote (then do the same as in github):
+mkidr myrepo.git; cd !$
+git init --bare 
+
+- initiating a new bare repo, from cloning an existing one:
+git clone --bare . path/to/repo.git
+git remote add origin path/to/repo.git
+
+- Set a new URL:
+git remote set-url origin git@github.com:User/project-new.git
+
+Adding - general
+----------------
+
+- add choosing patch, chunks of code
+git add -p
+
+- commit on a date
+
+GIT_COMMITTER_DATE="2006-10-02 10:31" git commit
+GIT_AUTHOR_DATE="2006-10-02 10:31" git commit
+
+- setting author date on commit
+git commit --date="2006-10-02 10:31"
+git commit --author="A U Thor <author@example.com>"
+
+
+Status / History
+----------------
+
+git status
+git show <object>
+git log --oneline
+git diff --stat
+git diff --word-diff
+
+- searches for all occurrences of "hello" in v2.5
+git grep "hello" v2.5
+
+- search any of the files it manages in your current directory
+git grep "hello"
+
+- all changes to a file (https://stackoverflow.com/a/5493663/7774591):
+git log --follow -p -- <file>
+
+- show commit/author that last changed each line of file:
+git blame <file>
+
+- how many commits each one did
+git shortlog -sn --all --no-merges
+
+Git Structure
+-------------
+
+- type of object:
+git cat-file -t 702c7
+
+- printing object:
+git cat-file [blob|tree|commit|tag] 702c7
+
+- examine a tree:
+git ls-tree 92b8b
+
+- checking the index:
+git ls-files --stage
+
+- difference between index and current files
+git diff 
+
+- difference between last commit and current files
+git diff HEAD
+
+- difference between the index and the last commit
+git diff --cached
+
+Restoring
+---------
+
+- restore a file
+git checkout HEAD filename
+
+- rewind project to a commit (HEAD will be detached)
+git checkout 55df4c2
+
+- undo last commit. Same as using `--mixed`: resets the index, but not the working tree.
+git reset HEAD^
+
+- undo last commit (leaving last changes staged) `--soft`: both working tree and index are not changed.
+git reset --soft HEAD^ 
+
+- roll back to a commit. `--hard`: both working tree and index are changed.
+git reset --soft <commit>
+
+- Replace last commit to new commit
+git commit --amend -m "message"
+
+Stashing changes
+----------------
+https://stackoverflow.com/questions/44680028/whats-the-difference-between-git-stash-save-and-git-stash-push#44681952
+
+- Now you want to switch branches, but you don’t want to commit what you’ve been working on yet; so you’ll stash the changes. To push a new stash onto your stack, run either:
+git stash
+git stash save
+(this will be deprecated, see ref, use next)
+
+- stash specific files
+git stash push -m "why doing it?" [file...]
+
+- To see which stashes you’ve stored, you can use: 
+git stash list
+
+- reapply the stashed work (but does not remove the stash):
+git stash apply
+git stash apply stash@{2}
+
+- apply and remove the stash
+git stash pop 
+
+- remove a single stashed state
+git stash drop [<stash>]
+
+Tags
+----
+https://stackoverflow.com/questions/11514075/what-is-the-difference-between-an-annotated-and-unannotated-tag
+https://stackoverflow.com/questions/5195859/push-a-tag-to-a-remote-repository-using-git#5195913
+https://stackoverflow.com/a/26438076/7774591
+
+- list tags
+git tag -l
+git tag
+
+- adding a "lightweight" tag to commit/master
+git tag v2.5 <1b2e1d63ff/master>
+
+- on a date
+GIT_COMMITTER_DATE="2006-10-02 10:31" git tag v1.0.1 <ref>
+
+- annotated tag (if not -m used, editor for message will be opened, multiple -m makes multiple paragraphs)
+git tag -a vX.Y [-m 'hey, this is my tag']
+
+- to send annotated and reachable tags (not lightweight):
+git push --follow-tags
+
+- send all tags (not recommended)
+git push --tags
+
+- To push a single tag:
+git push origin <tag_name>
+
+Branches
+--------
+
+- merging. example: Bringing changes from 'experimental' branch to 'master' (merge = bring)
+git checkout master
+git merge experimental
+
+- removing branch (that was already merged):
+git branch -d <branchname>
+
+- force removing branch (throwing out changes)
+git branch -D <branchname>
+
+- when pushing a new branch (or -u)
+git push --set-upstream origin <new_branch>
+
+- pulling a new branch (it may be required a pull if there are commits on other branches)
+git fetch
+git checkout -b <new_branch> --track origin/<new_branch>
+
+- pushing all branches (no need for previous one)
+git push --all origin -u
+git push --tags origin
+
+Rebase
+------
+
+good ref: https://git-scm.com/book/en/v2/Git-Branching-Rebasing
+
+key lesson:
+
+- Do not rebase commits that exist outside your repository.
+
+
+Patch
+-----
+ref: https://stackoverflow.com/a/15438863/7774591
+
+- making a patch (also git format-patch)
+git diff > mypatch.patch
+
+- tip: add changes first to select what goes to the patch:
+git add <files>
+git diff --stage [--binary] > mypatch.patch
+
+- to apply changes:
+git apply mypatch.patch
+
+
+Submodules
+----------
+
+git submodule add ~/subtut/public/$mod.git $mod
+
+- to initialize your local configuration file (to add the submodule repository URLs to .git/config): 
+git submodule init
+
+- to fetch all the data (clone) from that project and check out the appropriate commit listed in your superproject:
+git submodule update 
+
+- clone project with submodules, then do: submodule init; submodule update:
+git clone --recursive https://github.com/chaconinc/MainProject
+
+- 
+git submodule status
+git submodule summary
+
+- to update, from super:
+git pull
+git submodule update
+
+- or, with the following git will go into you submodules and fetch and update:
+git submodule update --remote
+
+- on super, push it and check/push submodules too
+git push --recurse-submodules=[check|on-demand]
+
+- adding a new branch that exists in origin repo
+git fetch
+git checkout -b results --track origin/results
+
+- adding a submodule from a github repository that was already started (at least created in github with README.md added):
+git submodule add git@github/User/Myrepo.git
+
+- useful trick: add "ignore = dirty" to .gitmodules,
+so git status will only report differences when the submodule
+has new commits, not on un-commited changes, refs:
+https://stackoverflow.com/a/4874323/7774591
+
+Backup
+------
+
+Use git bundle
+
+Some aliases
+------------
+
+git config --global alias.wdiff "diff --color-words='[^[:space:]]|([[:alnum:]]|UTF_8_GUARD)+'" (https://stackoverflow.com/questions/3231759/how-can-i-visualize-per-character-differences-in-a-unified-diff-file/25634420#25634420)
+
+git config --global alias.tree 'log --oneline --graph --all'
+
+
+Workflow
+--------
+from: https://git-scm.com/docs/gitworkflows
+
+branches:
+ 
+    ↗ next
+ ↗ master
+maint
+
+- *maint* tracks the commits that should go into the next "maintenance release", i.e., update of the last released stable version;
+- *master* tracks the commits that should go into the next release;
+- *next* is intended as a testing branch for topics being tested for stability for master.
+
+
+- "Each of the four branches is usually a direct descendant of the one above it." e.g.: 
+git checkout maint
+git branch master
+
+- "Always commit your fixes to the oldest supported branch that require them. Then (periodically) merge the integration branches upwards into each other." e.g.:
+
+git checkout maint
+(changes)
+git commit
+git checkout master
+git merge maint
+
+- Topic branches: "Make a side branch for every topic (feature, bugfix, …​). Fork it off at the oldest integration branch that you will eventually want to merge it into." e.g.:
+
+git checkout master
+git branch newfeatX
+git checkout newfeatX
+(changes)
+git commit
+git checkout master
+git merge newfeatX
+
+- "Rule: Merge to downstream only at well-defined points"
+- "Rule: Throw-away integration branches. To test the interaction of several topics, merge them into a throw-away branch. You must never base any work on such a branch!"
+
+- Recipe: Verify master is a superset of maint:
+git log master..maint
+[This command should not list any commits]
+
+(need to continue, and test)

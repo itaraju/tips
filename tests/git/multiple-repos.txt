@@ -1,0 +1,57 @@
+Testing having two repositories upstream (origin and backup)
+
+Init:
+
+	mkdir -p ~/Projects/test/proj1
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+
+Repos:
+
+	cd ~/Projects/test/
+	mkdir github
+	mkdir backup
+	cd proj1
+	git clone --bare . ../github/proj1.git
+	git clone --bare . ../backup/proj1.git
+	git remote add origin ~/Projects/test/github/proj1.git
+	git remote add backup ~/Projects/test/backup/proj1.git
+
+Making changes:
+
+	cd ~/Projects/test/proj1
+	echo "ch1" >> a.txt
+	echo "file2" > b.txt
+	git add .
+	git commit -m "change 1"
+	
+Spreading them:
+
+	git push -u origin master
+	git push backup master
+	
+Interesting, all remote branchs are present:
+
+	git branch -a
+
+Funny, that repos might differ in size:
+
+	cd ..
+	du -sh *
+
+More changes:
+
+	cd ~/Projects/test/proj1
+	echo "ch2" >> a.txt
+	echo "ch2" >> b.txt
+	git add .
+	git commit -m "change 2"
+	
+	git push
+	
+No need to specify master branch here:
+	git push backup
+
