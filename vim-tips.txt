@@ -59,30 +59,18 @@ R - in overwrite mode
 c-R - redo
 p,P - put below/up
 yy - yank line
-J - join cuurent line with next one
+J - join current line with next one
 o,O - abrir linhas abaixo/acima
 
 c-a,c-x increade,decrease numbers (normal mode)
+{visual}g c-a,c-x form sequence, adding incrementaly
+
+~ change case at character
+g~{motion}, {visual}~
+gU{motion},gu{motion},gUgU,gugu - upper/lower case
 
 c-o enable normal mode commands in insert mode
 :normal in visual mode, enable to run normal model commands
-
-Search / replace
-------------------------------------------------------
-
-/ - busca a frente
-? - busca a tras
-/<busca\c - ignorar case
-c-o, c-i :volta para posições
-n - search again
-N - search again backwards
-% - search matching parentesis	
-
-:#,#s/old/new/g    line range: #,#
-:%s/old/new/g      to change every occurrence in the whole file.
-:%s/old/new/gc     to find every occurrence in the whole file,
-                   with a prompt wether to substitute or not.
-
 
 Formating [1]
 -------------------------------------------------------
@@ -106,6 +94,22 @@ gqq,gqgq,gwgw,gww - same, for line
 
 :Explore - file browser
 :[SV]Explore - explore with split screen
+
+Search / replace
+------------------------------------------------------
+
+/ - busca a frente
+? - busca a tras
+/<busca\c - ignorar case
+c-o, c-i :volta para posições
+n - search again
+N - search again backwards
+% - search matching parentesis	
+
+:#,#s/old/new/g    line range: #,#
+:%s/old/new/g      to change every occurrence in the whole file.
+:%s/old/new/gc     to find every occurrence in the whole file,
+                   with a prompt wether to substitute or not.
 
 Buffers - windows
 ------------------------------------------------------
