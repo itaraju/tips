@@ -186,6 +186,7 @@ zw mark good word as misspeled
 Other
 ------------
 ctags: [5, 4]
+:w ++ff=unix - change file format
 
 References
 ==========
@@ -194,5 +195,5 @@ References
 [2] https://www.linux.com/learn/vim-tips-working-external-commands
 [3] https://youtu.be/3TX3kV3TICU - Let Vim do the typing
 [4] https://youtu.be/Qem8cpbJeYc - Vim Navigation Commands
-[5] video no-plugins
+[5] https://youtu.be/XA2WjJbmmoM - video no-plugins
 [6] https://youtu.be/wlR5gYd6um0 - Mastering the Vim language ("Never hit a ceiling")
