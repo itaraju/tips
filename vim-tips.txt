@@ -179,7 +179,7 @@ Spell checking
 set spellang=en_us pt_br
 
 [s,]s previous,next misspeled word
-z= get suggesting for word
+{count}z= get suggestion for word, if {count} the suggestion at {count} is used.
 zg mark misspeled word as correct
 zw mark good word as misspeled
 

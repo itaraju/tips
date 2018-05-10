@@ -1,0 +1,78 @@
+Testing removing an added submodule. 
+based on: https://stackoverflow.com/a/21211232/7774591
+
+1) when the submodule addition was not commited yet.
+
+Init:
+
+	mkdir -p ~/Projects/test/proj1
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init proj1"
+
+	mkdir -p ~/Projects/test/proj2
+	cd !$
+	git init
+	echo "file2" > b.txt
+	git add .
+	git commit -m "init proj2"
+
+Snapshot of objects
+    cd ~/Projects/test/proj1/
+    find .git/objects/ > ~/Projects/test/p1-objs.txt
+
+Adding proj2 as submodule of proj1:
+
+    cd ~/Projects/test/proj1
+    git submodule add ../proj2
+
+Snapshot of objects again
+    cd ~/Projects/test/proj1/
+    find .git/objects/ > ~/Projects/test/p1-new-objs.txt
+
+At this point, the changes were:
+
+1) directory ~/Projects/test/proj1/proj2 created, with contents (including .git) of proj2
+2) file .gitmodules created in proj1/
+3) .gitmodules and dir in 1) added to index (git add)
+4) proj1/.git/config got a section '[submodule "proj2"]' (it looks that git init is not required)
+5) proj1/.git/modules/proj2 created
+6) diff of ~/Projects/test/p1-objs.txt shows that there is a new object in proj1/.git/objects with the contents of .gitmodules
+    
+Trying to undo with git reset:
+
+    git reset HEAD proj2
+    git reset HEAD .gitmodules
+
+This undoes 1, 2, 3 above (keeping the files as untracked), but does not undo 4, 5, 6.
+Note:
+    find .git/objects/ |diff ../p1-objs.txt -
+    diff ../p1-objs.txt ../p1-new-objs.txt
+    git fsck --unreachable 
+shows that the object mentioned in 6 remains, and is unreachable as expected.
+
+Applying the Stackoverflow idea:
+
+    rm -rf proj2
+    rm .gitmodules
+    rm -rf .git/modules/proj2
+    git config -f .git/config --remove-section submodule.proj2
+
+The command "git rm proj2" (from the SO post) is not required, it fails here.
+So it was removed from the list above, after the first atempt.
+
+This takes care of the changes 4, 5 abore. The object in 6 still remains.
+And next command will do it:
+
+    git prune -n
+    git prune -v
+
+Checking it:
+    find .git/objects/ |diff ../p1-objs.txt -
+    git fsck --unreachable 
+
+Removing test:
+    cd ~/Projects/
+    rm -rf test
