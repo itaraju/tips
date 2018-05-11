@@ -1,0 +1,68 @@
+Testing if file removal, in a different branch, remain after merge.
+
+Starting repo:
+
+    mkdir ~/Projects/test
+    cd !$
+    git init
+    echo "file1" > a.txt
+    echo "file2" > b.txt
+    git add .
+    git commit -m "init"
+
+New branch:
+
+    git checkout -b br1 
+    git rm a.txt
+    echo "change1" >> b.txt
+    git add .
+    git commit -m "new br1"
+
+Changes in master:
+
+    git checkout master
+    echo "chg2" >> a.txt
+    echo "chg3" >> b.txt
+    git add .
+    git commit -m "changes in master"
+    echo "file3" >> c.txt
+    git add .
+    git commit -m "new content in master"
+
+Branches diverged:
+
+    git log --oneline --graph --all
+    git diff --stat master..br1
+    git ls-tree master
+    git ls-tree br1
+
+That's the case we wanted to simulate: where the diverging branch (br1) removed
+some files that remain in master, whereas master get new content.
+
+Q: does merging master into br brings only the new content? what happens to the
+conted that had been removed in br1?
+
+    git checkout br1
+    git merge master
+
+Messages from merge:
+ Auto-merging b.txt
+ CONFLICT (content): Merge conflict in b.txt
+ CONFLICT (modify/delete): a.txt deleted in HEAD and modified in master. Version master of a.txt left in tree.
+ Automatic merge failed; fix conflicts and then commit the result.
+
+    git status
+
+This shows that:
+1) the new files in master (c.tct) were staged
+2) the deleted files (a.txt) were announced, to be staged
+3) conflits are announced (b.txt)
+
+1 and 3 were expected. But 2 is the interesting one here, so that important
+changes (removal) are not silently added back.
+
+---------------------------------------------------------------
+Removing test:
+
+    cd ~/Projects/
+    rm -rf test
