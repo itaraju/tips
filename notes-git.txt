@@ -1,0 +1,41 @@
+Fletch137 7 months ago [-] (https://news.ycombinator.com/item?id=15383091)
+--------------------------------------------------------------------------
+
+I like to use: `alias sp='vim ~/notes/scratchpad-$(date +"%m-%d-%Y-%T")'`
+ 	
+dheera 7 months ago [-] (in reply to the above)
+-----------------------------------------------
+
+I use
+    #!/bin/bash
+    mkdir -p ~/Dropbox/scratch/$(date +"%Y-%m-%d")
+    vim ~/Dropbox/scratch/$(date +"%Y-%m-%d")/$(date +"%Y-%m-%d-%H-%M-%S")
+for convenient sorting by date, and throw stuff in Dropbox for automatic syncing across my machines.
+
+	
+Diederich 7 months ago [-] (https://news.ycombinator.com/item?id=15387458)
+--------------------------------------------------------------------------
+
+This is neat, and there's a lot of interesting comments and pointers elsewhere in these comment
+threads.  What I've been doing (for the last 25 years or so) is simple. I always keep a window open,
+visible in all virtual desktops, on the bottom right of my screen, with: vi ~/notes/notes.  For
+somewhat less than the last 25 years, ~/notes is an encrypted git repo. I have a cron that,
+minutely, adds, commits, pulls and pushes to a couple of my servers on the Internet.  I generally
+have one of these for each company I work for, and another one that I've used for all things
+personal.
+
+	
+There's really not much involved.
+For the encrypted git repo, I use this:
+https://github.com/AGWA/git-crypt
+
+The cron points to a shell script:
+#!/bin/sh
+cd ~/notes
+git add -A .
+git commit -am wip
+git pull
+git push
+
+So with that, I have the same directory, ~/notes/ syncd on all of my computers automatically, as
+long as I don't do conflicting edits within the space of a minute, which has never happened.

@@ -156,8 +156,8 @@ All in insert mode:
 C-r pick registers
 C-a last instered text, same as C-r .
 c-@ same as c-a<esc> to exit imode
-c-y repeat character from line above
-c-k enter digraphs, check: :digraphs
+c-y,c-e repeat character from line above/bellow
+c-k enter digraphs, check: :digraphs, eg: a*=α b*=β p*=π r*=ρ
 c-o {command} executes command in normal mode
 
 C-p complete with Previous text
