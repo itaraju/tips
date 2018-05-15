@@ -23,8 +23,14 @@ t,T - find up to
 m<letter> mark to letter - if uppercase then it's Global bookmark
 `<letter> - "noum" go to mark
 '<letter> - "noum" go to line of mark
+'<,'> special marks, last visual range start/end
 :marks - show the marks
-'' to the position before last jump
+
+`` back&forth jump to the last position
+'' back&forth jump to the last position, start of line
+c-o like ``, but only older positions
+c-i like ``, but only newer positions
+:jumps - show available jumps
 
 n% go to line n %
 L lower line in the screen
@@ -38,7 +44,7 @@ C-f, C-b full scree Forward/Backward
 C-e,C-y scrool one line up/down
 
 0,^,g_,$ line navigation   
-* search the current word
+% - search matching parentesis	
 
 [linha]G -goto-line
 G - toto-eof
@@ -98,18 +104,49 @@ gqq,gqgq,gwgw,gww - same, for line
 Search / replace
 ------------------------------------------------------
 
-/ - busca a frente
-? - busca a tras
-/<busca\c - ignorar case
-c-o, c-i :volta para posições
-n - search again
-N - search again backwards
-% - search matching parentesis	
+* search the current word
+/,? - search forward,backwards
+\c,\C ignore case, use case (in search)
+n,N - search again forward,backwards
+/,// - search again, allowing modifiers
 
-:#,#s/old/new/g    line range: #,#
-:%s/old/new/g      to change every occurrence in the whole file.
-:%s/old/new/gc     to find every occurrence in the whole file,
-                   with a prompt wether to substitute or not.
+/search/{+-number} line jump after match
+/search/[be]{+-number} character jump after match, [be]: begin/end
+
+Regular expressions:
+\( \) - groups
+\| - alternative
+*, \+, \=, - zero+, 1+match, 0/1match
+\{n,m}, \{-n,m} - min/max match, min/max match as few as possible
+\{-} - from \{-n,m} above, but like *, matching as few as possible
+[] character ranges, with ^ being invert
+\e, \t, \r, \b - <Esc>, <Tab>, <CR>, <BS> inside []
+\d,\D - digit, non-digit - not inside []
+\s,\S - space, non-space - not inside []
+\l,\L,\u,\U - character cases - not inside []
+\n - line break
+\_ - adds linke break to the character class, e.g.: \_s for space or line break, "\_[^"]*"
+everything between quotes
+
+:{range}s/old/new/{flag}
+flags:
+ g global (multiple substitute)
+ c confirm
+ranges:
+ <empty> current line
+ % whole file
+ #,# lines and # can be line number or the following:
+ . current line
+ $ last line
+ ?pattern?,/pattern/ searching back/forward
+ 't,'b marks
+ can add {number} to all abore, eg.: .-1,/hey/2
+
+Not using /: use other character after s, e.g.: :s+old+new
+
+Global, execute ex command at matches:
+:[range]global/{pattern}/{command}
+ default range is current line
 
 Buffers - windows
 ------------------------------------------------------
@@ -149,7 +186,9 @@ Auto completion [1, 3, 5]
 :let @<register>="value"
 a-z,A-Z: named registers
 . (special register) last inserted text
-0 (special register) last yanked text
+0 (m<letter> mark to letter - if uppercase then it's Global bookmark
+
+special register) last yanked text
 
 All in insert mode:
 
