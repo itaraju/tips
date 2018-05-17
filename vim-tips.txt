@@ -180,15 +180,25 @@ External commands [2]
 :r ! cmd  - read command output
 :r <file> insert file
 
+:redi[r] @{a-z,"} - redirect messages to register, if capital letter, or >> (like @a>>), appends
+:redi[r] END - ends redirecting
+sytem('command') - return result from shell command, e.g. :let @a = system('ls')
+
 Auto completion [1, 3, 5]
 ----------------------------------------------------
 "<register> selects register (e.g., then y or p)
 :let @<register>="value"
 a-z,A-Z: named registers
-. (special register) last inserted text
-0 (m<letter> mark to letter - if uppercase then it's Global bookmark
 
-special register) last yanked text
+special registers:
+" (unnamed reg) last yanked/deleted text, from commands d,c,s,x,y
+0 last yanked text
+1-9 last line deletes
+- last small delete
+. last inserted text
+_ black hole
+% name of current file
+*,+ system clipboard
 
 All in insert mode:
 
