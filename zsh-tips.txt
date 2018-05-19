@@ -1,0 +1,27 @@
+Filenames
+=========
+^,[],(),| - as in regular expressions, kind of.
+<num1-num2> - from num1 to num2
+** - recurse directories
+pat1 ~ pat2 - exclude pat2 from pat1
+
+modifiers (for pattern(...))
+ / directory
+ @ link
+ *,x,X executable, by all
+ r,R readable, by all
+ w,W writable, by all
+ U owned
+ . plain files
+
+Command/process substitution
+============================
+``, $() - puts content there
+=() creates file with content, returns filename
+
+Others
+======
+
+alias -g - global aliases (can be anywhere)
+fc - edits last command
+vared PATH - edits variable
