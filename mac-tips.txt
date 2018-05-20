@@ -33,10 +33,13 @@ defaults write com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag -bool t
 
 Keyboard
 ========
-emoji shortcut: CTRL+Command+Space
+emoji 🙂 shortcut: CTRL+Command+Space
 
 show/hide Help: Cmd-Shift-/ 
-[this also shows the menu, nice with auto-hide menu: https://www.reddit.com/r/osx/comments/3n9hqj/is_there_any_keyboard_shortcut_to_toggle_menu_bar/]
+- this also shows the menu, nice with auto-hide menu: https://www.reddit.com/r/osx/comments/3n9hqj/is_there_any_keyboard_shortcut_to_toggle_menu_bar/
+- changes made based on this:
+    - General - toggle: "Automatically hide and show the menu bar"
+    - Keyboard -> Shortcuts -> Keyboard -> "Move focus to menu bar" to Cmd-/
 
 c-cmd-d / force-touch at a word - show look-up for the word
 

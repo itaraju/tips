@@ -14,6 +14,11 @@ modifiers (for pattern(...))
  U owned
  . plain files
 
+Brace expansion
+===============
+str{xx,yy,zz}ing is expanded to the individual words strxxing stryying strzzing
+same for numbers: {n1..n2}
+
 Command/process substitution
 ============================
 ``, $() - puts content there
