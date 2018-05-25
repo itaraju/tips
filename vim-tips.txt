@@ -236,6 +236,7 @@ Other
 ------------
 ctags: [5, 4]
 :w ++ff=unix - change file format
+The last command entered with ':' can be repeated with @: and further repeats can be done with @@
 
 References
 ==========

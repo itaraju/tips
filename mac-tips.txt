@@ -17,6 +17,9 @@ command line tips
 
 https://www.infoworld.com/article/2614879/mac-os-x/mac-os-x-top-20-os-x-command-line-secrets-for-power-users.html?page=2
 
+Use quick look from command line (http://osxdaily.com/2007/12/24/use-quick-look-from-the-command-line/)
+qlmanage -p
+use this command to generate pdf from iWork files: https://stackoverflow.com/a/10041150/7774591
 
 trackpad stuff:
 ===============
