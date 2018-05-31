@@ -1,0 +1,17 @@
+Using external values
+---------------------
+from: https://tex.stackexchange.com/a/32859
+
+- write datafile with: \def\name{value}%
+- impute{} the data file in the .tex
+- 'name' only with letters. For numbers, check the ref.
+
+Importing csv files into tables
+-------------------------------
+
+- \pgfplotstabletypeset from package pgfplotstable
+  (https://tex.stackexchange.com/a/211396,
+  https://tex.stackexchange.com/a/146729)
+
+- \csvreader from package csvsimple (https://tex.stackexchange.com/a/211399,
+  https://tex.stackexchange.com/q/146716)

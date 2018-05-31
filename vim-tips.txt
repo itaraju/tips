@@ -202,7 +202,7 @@ _ black hole
 
 All in insert mode:
 
-C-r pick registers
+C-r pick registers (also in ex mode)
 C-a last instered text, same as C-r .
 c-@ same as c-a<esc> to exit imode
 c-y,c-e repeat character from line above/bellow
