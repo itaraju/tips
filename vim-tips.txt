@@ -234,9 +234,12 @@ zw mark good word as misspeled
 
 Other
 ------------
-ctags: [5, 4]
-:w ++ff=unix - change file format
-The last command entered with ':' can be repeated with @: and further repeats can be done with @@
+- ctags: [5, 4]
+- :w ++ff=unix - change file format
+- The last command entered with ':' can be repeated with @: and further repeats
+  can be done with @@
+- To determine the ASCII code to use, :echo char2nr("-")
+- :args *.c - to set vim's argument list aft its already open
 
 References
 ==========
