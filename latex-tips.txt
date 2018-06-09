@@ -15,3 +15,25 @@ Importing csv files into tables
 
 - \csvreader from package csvsimple (https://tex.stackexchange.com/a/211399,
   https://tex.stackexchange.com/q/146716)
+
+Git workflow
+------------
+ref: https://stackoverflow.com/a/6190412/7774591
+- each sentence in a different line.
+- split chapters (sections?) in different files
+- latexdiff
+
+tikz to eps
+-----------
+
+search: tikz manual externalizing graphics, got:
+https://tex.stackexchange.com/a/1475/164467
+(this worked out, generating .ps files, quite similar to the
+desired .eps ones, basically just a rename away)
+
+good check:
+http://pgf-and-tikz.10981.n7.nabble.com/Externalizing-Graphics-td1343.html
+
+also (first references):
+https://latex.org/forum/viewtopic.php?t=16218
+https://latexissues.wordpress.com/2015/09/01/convert-tikz-figures-to-eps/

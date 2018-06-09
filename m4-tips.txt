@@ -1,0 +1,18 @@
+
+Safe use
+========
+
+Safe use of m4 (https://modelingwithdata.org/arch/00000188.htm)
+summary, use:
+- m4 -P
+- m4_changequote(<|, |>)
+- m4_changecom()
+- Use a unique not-a-comma for a separator, e.g., ~~
+- Use sed to replace all actual commas with <|,|>.
+
+So, to avoid in the text: m4_something, <|, |>, or ~~
+
+in shell:
+m5 () { cat $* | sed 's/,/<|,|>/g' | sed 's/\~\~/,/g' | \
+               m4 -P <(echo "m4_changecom()m4_changequote(<|, |>)") -
+      }
