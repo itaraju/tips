@@ -123,15 +123,22 @@ Regular expressions:
 \e, \t, \r, \b - <Esc>, <Tab>, <CR>, <BS> inside []
 \d,\D - digit, non-digit - not inside []
 \s,\S - space, non-space - not inside []
+\w word [0-9A-Za-z_], non: \W
+\a alphabetic, non: \A
 \l,\L,\u,\U - character cases - not inside []
 \n - line break
+\<,\> matche start,end of words
 \_ - adds linke break to the character class, e.g.: \_s for space or line break, "\_[^"]*"
 everything between quotes
 
 :{range}s/old/new/{flag}
+new (check :help substitute):
+ \0 the whole matched pattern
+ \1, ...\9 matched ()
 flags:
  g global (multiple substitute)
  c confirm
+ n count matches (no substitute)
 ranges:
  <empty> current line
  % whole file
