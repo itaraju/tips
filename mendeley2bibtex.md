@@ -38,11 +38,14 @@ entries for this field, and add again in the GUI.
 # there are similar issues with url field:
 /^url.*{\\/
 
-Common fixes:
+With {\_}, {\&}, {\%}, and it's probably better to leave them as they are. If
+required to change them:
 g/^url.*{\\_}/s/{\\_}/_/g
 g/^url.*{\\&}/s/{\\&}/\&/g
 g/^url.*{\\%}/s/{\\%}/%/g
 
+# Accents with double braces, like {\~{a}} instead of {\~a}
+%s/{\\\(.\){\(\a\)}}/{\\\1\2}/g
 
 # convert the mendeley-tags?
 In Vim ex mode:
