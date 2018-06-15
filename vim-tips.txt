@@ -109,6 +109,7 @@ Search / replace
 \c,\C ignore case, use case (in search)
 n,N - search again forward,backwards
 /,// - search again, allowing modifiers
+gn,gN - motion object for last search, also apply visual mode if not after operator
 
 /search/{+-number} line jump after match
 /search/[be]{+-number} character jump after match, [be]: begin/end
