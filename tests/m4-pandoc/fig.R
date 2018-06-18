@@ -1,0 +1,5 @@
+cars = readRDS('cars.rds')
+pdf('fig.pdf')
+boxplot(hp ~ cyl, data=cars)
+dev.off()
+cat("fig.pdf made\n")

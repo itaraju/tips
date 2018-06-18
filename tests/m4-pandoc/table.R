@@ -1,0 +1,5 @@
+require(knitr)
+source('summarize.R')
+x = kable(sum, format="pandoc")
+writeLines(x, con="table.md")
+cat("table.md made\n")
