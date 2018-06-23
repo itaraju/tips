@@ -240,6 +240,12 @@ set spellang=en_us pt_br
 zg mark misspeled word as correct
 zw mark good word as misspeled
 
+Scripting
+---------
+vim -s macro file
+vim -T dumb --noplugin -n -i NONE -es -S "commands.ex" "filespec"
+vim -u NONE -n -i NONE -es -S "commands.ex" "filespec"
+
 Other
 ------------
 - ctags: [5, 4]
