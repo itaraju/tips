@@ -32,10 +32,13 @@ c-o like ``, but only older positions
 c-i like ``, but only newer positions
 :jumps - show available jumps
 
-n% go to line n %
 L lower line in the screen
 M middle
 H higher line
+[linha]G -goto-line
+[count]% go to [count] percent line of file
+G - toto-eof
+gg - goto-bof
 
 zz,z. center screen at current line
 zt,zb top, bottom
@@ -43,12 +46,9 @@ C-d, C-u half screen Down/Up
 C-f, C-b full scree Forward/Backward
 C-e,C-y scrool one line up/down
 
-0,^,g_,$ line navigation   
+0,^,g_,$,gm line navigation   
+[count]| to screen column
 % - search matching parentesis	
-
-[linha]G -goto-line
-G - toto-eof
-gg - goto-bof
 
 Editing
 ------------------------------------------------------
