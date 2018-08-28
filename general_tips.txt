@@ -45,27 +45,6 @@ echo *|xargs rm
 argumentos aterm:
 aterm -tr -sh 80 -fg white -bg blue +sb -vb   -geometry 83x11+694+850 -e ssh -C proteome
 
--- PDF
-extração de páginas:
-$ pdftops afile.pdf - | psselect -p11-14 | ps2pdf - file-p11-14.pdf
-ou
-$ pdftk A=afile.pdf cat A11-14 output file-p11-14.pdf
-
-merging:
-psmerge
-
-$ pdftops file1.pdf 
-$ pdftops file2.pdf
-$ psmerge file1.ps file2.ps | ps2pdf - finalfile.pdf
-$ rm file1.ps file2.ps
-
-para merge de vários arquivos:
-$ for f in `ls *.pdf`; do pdf2ps "$f"; done
-$ echo *.ps|xargs psmerge -ofinalfile.ps #não funcionou este
-
-Alternativa:
-pdfjam
-
 --- Alerta via notify-send (from:http://wagiaalla.com/2007/06/06/notify-send/)
 alias saydone='notify-send "Done! `if [ \$? = 0 ]; then echo \:\); else echo \:\(; fi`"'
 
