@@ -12,8 +12,8 @@ set linebreak " break the lines on words (?)
 " set foldmethod=manual "??? do something about auto folding
 " let b:pandoc_folding_basic=1 "??? do something about auto folding
 " extra:
-set lines=34 columns=85 " size of the editable area
-winpos 0 0
+" set lines=34 columns=85 " size of the editable area
+" winpos 0 0
 cd ~/tmp/notes/
 edit note1.md
 
