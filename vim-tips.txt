@@ -132,6 +132,8 @@ Regular expressions:
 \_ - adds linke break to the character class, e.g.: \_s for space or line break, "\_[^"]*"
 everything between quotes
 
+\r - new line in the substitution side
+
 :{range}s/old/new/{flag}
 new (check :help substitute):
  \0 the whole matched pattern
