@@ -78,6 +78,8 @@ gU{motion},gu{motion},gUgU,gugu - upper/lower case
 c-o enable normal mode commands in insert mode
 :normal in visual mode, enable to run normal model commands
 
+gv repeat last visual area
+
 Formating [1]
 -------------------------------------------------------
 
