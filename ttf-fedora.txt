@@ -1,3 +1,8 @@
+Old procedure:
+--------------
+(probably, from/based on: http://corefonts.sourceforge.net/)
+
+
 To install Windows TrueType fonts, open a terminal and become root again:
 
 su
@@ -10,3 +15,14 @@ yum -y install rpm-build cabextract ttmkfdir
 
 rpmbuild -bb msttcorefonts-2.0-1.spec
 rpm -ivh /root/rpmbuild/RPMS/noarch/msttcorefonts-2.0-1.noarch.rpm --nodeps
+
+New procedure:
+--------------
+from: http://mscorefonts2.sourceforge.net/
+
+
+yum install curl cabextract xorg-x11-font-utils fontconfig
+
+rpm -i https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+
+
