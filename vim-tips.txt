@@ -258,6 +258,7 @@ Other
   can be done with @@
 - To determine the ASCII code to use, :echo char2nr("-")
 - :args *.c - to set vim's argument list aft its already open
+- set guifont=* - select fonts on screen (set guifont? to check)
 
 References
 ==========
