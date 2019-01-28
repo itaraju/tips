@@ -100,3 +100,21 @@ fedora booting into emergency mode:
 > After reading A LOT on the issue, I found some posts for Fedora 16 stating that a problem with mounting the /home partition was the cause of the dependency failure. I added "nofail" to the options in /etc/fstab after "defaults" and it works like a charm now. Hope this helps someone else in a similar spot.
 
 > It turns out, I had added a line to my /etc/fstab to auto-mount one of my Virtualbox shared folders. By upgrading the kernel, I (obviously) lost the kernel module that mount relies on, and so it was forcing the emergency mode message. By adding nofail to the options, it allows me to boot, install the guest additions, and reboot. No more emergency mode!
+
+
+VM performance:
+===============
+- remove virtual disk from antivirus scanning
+- make virtual disk fixed size
+- increase cpu?
+- video memory to the maximum (enable accelaration options)
+
+Increase the minimun CPU speed(?):
+http://www.rawinfopages.com/tips/2015/05/speed-up-virtualbox-enormously-with-this-simple-tweak/
+
+    To do this, go to Power Options in the Control Panel and next to the Power
+    saver plan, click Change plan settings.
+
+    On the next screen, click Change advanced power settings. Expand Processor
+    power management, Minimum processor state, and set Plugged in to 80% or
+    whatever value gives reasonable performance in the virtual machine.
