@@ -4,12 +4,6 @@ the VM
 https://spins.fedoraproject.org/lxde/download/lxde-download-splash?file=https://download.fedoraproject.org/pub/fedora/linux/releases/25/Spins/x86_64/iso/Fedora-LXDE-Live-x86_64-25-1.3.iso
 
 
-
-linux 64
-4Gb ram
-sata wombat.vdi 10Gb
-
-
 booting onto text mode
 ======================
 
@@ -44,12 +38,59 @@ https://www.virtualbox.org/manual/ch04.html#idm1948
 
 dnf/yum  install kernel-devel kernel-headers dkms gcc gcc-c++
 
+- run: sudo ./VBoxLinuxAdditions.run
+
+Shared folders
+==============
 
 /etc/fstab:
-tmpshare	/mnt/tmp	vboxsf	uid=itaraju,rw,defaults,nofail
+tmpshare	/mnt/tmp	vboxsf	uid=<user>,rw,defaults,nofail
 
+Tips from: https://serverfault.com/a/674975
 
+For VirtualBox with a Linux guest, these are the steps to mount a shared
+folder:
 
+1.    Use the VirtualBox host's application, VirtualBox Manager, to specify
+host folders to share.
+
+2.    Make sure VirtualBox Guest Additions are installed in the VirtualBox
+guest.
+
+3.    In the Linux guest, the mount command should show a line that the share
+was mounted. This is indicated by type vboxsf. The issue becomes that the mount
+point may not be where desired, and the permissions are root only. The default
+mount location is in /media/sf_.
+
+4.    You can access the share by making the user, or group id of 1000, a
+member of group vboxsf. This is done by changing the vboxsf line in the
+/etc/group file. May require reboot.
+
+5.    You can change where the folder is mounted by using the VBoxControl
+command. The command is installed when Guest Additions is installed. May
+require reboot. For example, to change the mount point from /media/sf_... to
+/home/toto/sf_... use the following command to set the VirtualBox shared folder
+guestproperty:
+
+6.    sudo VBoxControl guestproperty set
+/VirtualBox/GuestAdd/SharedFolders/MountDir /home/toto/
+
+To confirm the change, use get:
+
+sudo VBoxControl guestproperty get /VirtualBox/GuestAdd/SharedFolders/MountDir
+
+----
+from: https://www.virtualbox.org/manual/ch04.html#sharedfolders
+
+The guest properties /VirtualBox/GuestAdd/SharedFolders/MountDir and the more
+generic /VirtualBox/GuestAdd/SharedFolders/MountPrefix can be used to override
+the automatic mount directory and prefix
+
+## problem: video
+
+There was a problem, where screen would not refresh (even at login screen) if
+on Full screen mode. Solution was to increase video memory in the virtual
+machine settings (from initial 16Mb to 64Mb)
 
 
 fedora booting into emergency mode:
