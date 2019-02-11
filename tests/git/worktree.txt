@@ -1,0 +1,69 @@
+Testing worktree feature
+refs: man git-worktree
+SO: why to use it?  https://stackoverflow.com/questions/31935776/what-would-i-use-git-worktree-for
+good answer: https://stackoverflow.com/a/32849492/7774591
+
+Creating testing repo, with a branch:
+
+	mkdir -p ~/repo/test
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+	git checkout -b br1	
+	echo "file2" > b.txt
+	echo "ch1" >> a.txt
+	git add b.txt
+	git commit -a -m "change1"
+	git tag chg1
+
+Adding new worktree
+
+        git checkout master
+        mkdir ~/repo/wrks
+        git worktree add ~/repo/wrks/test-master master
+
+        not good: master should not be already checked-out!
+        trying for br1:
+
+        git worktree add ~/repo/wrks/test-br1 br1
+
+        ls ~/repo/wrks/test-br1
+        [list files a.txt and b.txt]
+        git worktree list
+        cd ~/repo/wrks/test-br1
+        git worktree list
+        [lists the same results, with different directory for branch br1]
+
+Adding new changes to br1
+
+        cd ~/repo/wrks/test-br1
+        echo "ch2" >> b.txt
+	git add b.txt
+	git commit -a -m "change2"
+
+        git log -all
+        cd ~/repo/test
+        git log -all
+        [same commits, different HEADs]
+
+Removing worktree
+
+        cd ~/repo/test
+        git worktree remove ~/repo/wrks/test-br1
+        git worktree list
+
+Worktree for master - first detaching it
+
+        cd ~/repo/test
+        git checkout master
+        git tag zero
+        git checkout zero
+
+        git worktree add ~/repo/wrks/test-master master
+        [now it's good]
+        git worktree list
+
+        git checkout master
+        [error; good: only one checkout possible (again)]
