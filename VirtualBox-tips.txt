@@ -118,3 +118,88 @@ http://www.rawinfopages.com/tips/2015/05/speed-up-virtualbox-enormously-with-thi
     On the next screen, click Change advanced power settings. Expand Processor
     power management, Minimum processor state, and set Plugged in to 80% or
     whatever value gives reasonable performance in the virtual machine.
+
+
+Adding new disk to VM VirtualBox
+================================
+
+- created snapshot (2019-02-20)
+- added new disk .vdi 10Gb, name: linux-home.vdi
+
+Now on, following tips in:
+http://blogs.kasa.ws/how-to-install-new-disk-drives-in-fedora/
+
+1- Partition of the new disk drive
+
+Listing partitions
+# fdisk -l
+# ls -l /dev/sd*
+
+new disk on /dev/sdb, partitioning
+# fdisk /dev/sdb
+> m
+> n (add new partition)
+> e (extended kind)
+> enter (default number 1, default sector, and size)
+> p
+> n (adding new logical partition, as all space is filled up with sdb1)
+> p (partition created as sdb5)
+> w (write this)
+
+Extended partitions do not hold data, instead they hold logical partitions.
+So the new disk drive is in /dev/sdb5
+
+2- Create Logical Volumes with LVM
+
+Create a physical volume (PV)
+# pvcreate /dev/sdb5
+
+List PVs
+# pvdisplay
+
+Create Volume Group (VG)
+# vgcrate vg_home /dev/sdb5
+
+List VGs
+# vgdisplay
+
+Create Logical Volume (LV) leaving some free space
+# lvcreate -L 5GB -n lv_home vg_home
+
+3- Format the logical volume with the ext4 file system
+
+mke2fs -t ext4 /dev/vg_home/lv_home
+
+4- Mount it
+# mkdir /media/newhome
+# chmod 777 /media/newhome
+# mount /dev/vg_home/lv_home /media/newhome
+
+6- Copying home content
+
+First: logout, login using text mode (ctl-alt-f2 in login window, login to user)
+[in first atempt, this was performed only on step 7, but it's better if done here,
+as it will reduce the number of diff files]
+
+# cp -aRv /home/* /media/newhome/
+# diff -rq /home /media/newhome
+
+5- Add it to fstab
+/dev/vg_home/lv_home     /media/newhome     ext4     defaults     0 2
+or
+/dev/mapper/vg_home-lv_home /home   ext4    defaults    0 2
+
+7- Swapping volumes
+
+# umount /media/newhome
+# mv home old-home
+# mkdir home
+# mount /dev/mapper/vg_home-lv_home /home
+
+Check if things still look good
+
+# exit (root)
+% cd /
+% diff -rq /home /media/newhome
+
+8- Reboot
