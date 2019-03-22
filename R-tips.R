@@ -12,6 +12,10 @@ dt = read_excel("file.xls")
 require(openxlsx) # needs zip in PATH
 write.xlsx(list(tab1=df1, tab2=df2, ...), file='x.xlsx')
 
+# reads cell to cell (only xlsx types)
+require(tidyxl)
+dt = xlsx_cells(path=, sheets=)
+
 ## older:
 options(java.parameters = "-Xmx200g")
 require(XLConnect)
