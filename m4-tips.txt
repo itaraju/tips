@@ -1,5 +1,7 @@
-ref: http://mbreen.com/m4.html
+ref 1: http://mbreen.com/m4.html
+ref 2: https://www.linuxtoday.com/blog/macro-magic-m4-complete-guide.html
 
+esyscmd() : use output from linux command, e.g. esyscmd(date) (2)
 
 Safe use
 ========
