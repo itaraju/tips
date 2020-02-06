@@ -1,0 +1,24 @@
+# ref:
+https://www.cyberciti.biz/faq/install-and-setup-postgresql-on-rhel-8/
+https://www.postgresql.org/docs/
+
+# HBA config: /var/lib/pgsql/data/pg_hba.conf
+systemctl restart postgresql
+
+# adding user
+sudo -i -u postgres
+createuser --interactive [--pwprompt]
+
+## adding db
+sudo -i -u postgres
+createdb -O <user> <dbname>
+
+# util
+\conninfo
+\timing on
+\d, \dp list tables
+\d+ more info
+select version();
+select current_date/currect_time;
+cat x.txt|psql -c '\copy test from stdin' testdb
+psql -AtF$'\t' -c "select ...." > result.tabdelim
