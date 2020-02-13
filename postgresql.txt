@@ -8,6 +8,8 @@ systemctl restart postgresql
 # adding user
 sudo -i -u postgres
 createuser --interactive [--pwprompt]
+ALTER ROLE user WITH PASSWORD 'hu8jmn3';
+ALTER USER postgres PASSWORD 'MyNewPassword';
 
 ## adding db
 sudo -i -u postgres

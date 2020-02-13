@@ -19,6 +19,13 @@ para merge de vários arquivos:
 $ for f in `ls *.pdf`; do pdf2ps "$f"; done
 $ echo *.ps|xargs psmerge -ofinalfile.ps #não funcionou este
 
-Alternativa:
-pdfjam
+# merge com ghostscript (https://stackoverflow.com/a/2507825/7774591)
+gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf file1.pdf file2.pdf file3.pdf ...
 
+# multiple pages to single page:
+# options (not gs though):
+# https://stackoverflow.com/q/16119560/7774591
+# https://stackoverflow.com/a/8590107/7774591
+# from https://superuser.com/q/510037:
+pdf2ps input.pdf - | psnup -pA4 -4 | ps2pdf - out4.pdf
+(works but converts to image, not ideal)
