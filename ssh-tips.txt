@@ -12,7 +12,7 @@ ssh-keygen -l -f ~/.ssh/known_hosts
 
 # do it on local computer:
 cd ~/.ssh/
-ssh-keygen -t dsa
+ssh-keygen -t rsa -b 4096 [-C add@host/comment]
 sftp <remote host>, then  <put the id_dsa.pub>
 
 
