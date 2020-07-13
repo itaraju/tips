@@ -126,50 +126,9 @@ Adding new disk to VM VirtualBox
 - created snapshot (2019-02-20)
 - added new disk .vdi 10Gb, name: linux-home.vdi
 
-Now on, following tips in:
-http://blogs.kasa.ws/how-to-install-new-disk-drives-in-fedora/
+- following lvm.md: adding new disk/partition/volume
 
-1- Partition of the new disk drive
-
-Listing partitions
-# fdisk -l
-# ls -l /dev/sd*
-
-new disk on /dev/sdb, partitioning
-# fdisk /dev/sdb
-> m
-> n (add new partition)
-> e (extended kind)
-> enter (default number 1, default sector, and size)
-> p
-> n (adding new logical partition, as all space is filled up with sdb1)
-> p (partition created as sdb5)
-> w (write this)
-
-Extended partitions do not hold data, instead they hold logical partitions.
-So the new disk drive is in /dev/sdb5
-
-2- Create Logical Volumes with LVM
-
-Create a physical volume (PV)
-# pvcreate /dev/sdb5
-
-List PVs
-# pvdisplay
-
-Create Volume Group (VG)
-# vgcrate vg_home /dev/sdb5
-
-List VGs
-# vgdisplay
-
-Create Logical Volume (LV) leaving some free space
-# lvcreate -L 5GB -n lv_home vg_home
-
-3- Format the logical volume with the ext4 file system
-
-mke2fs -t ext4 /dev/vg_home/lv_home
-
+- at end:
 4- Mount it
 # mkdir /media/newhome
 # chmod 777 /media/newhome
