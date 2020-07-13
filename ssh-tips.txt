@@ -1,11 +1,21 @@
 #####################################################
-## shome checks
+## key checks
 
-# check fingerprint
+# obtain fingerprint from server
+# ref: man ssh ("verifying host keys") / https://askubuntu.com/a/83499
+ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key
+
+# list known fingerprints
 # from: https://superuser.com/a/529145/910302
 ssh-keygen -l -f ~/.ssh/known_hosts
 # and compare the fingerpting with the one produced
 # from a new host trying to connect to
+
+## useful: https://en.wikibooks.org/wiki/OpenSSH/Cookbook/Public_Key_Authentication#Downloading_keys
+# scan key fingerprints from a remote server:
+ssh-keyscan server.net | ssh-keygen -lf -
+# or
+ssh-keyscan -t rsa server.net | ssh-keygen -lvf -
 
 #####################################################
 ## ssh auto connect
