@@ -17,6 +17,12 @@ ssh-keyscan server.net | ssh-keygen -lf -
 # or
 ssh-keyscan -t rsa server.net | ssh-keygen -lvf -
 
+## keep server keys (e.g. across system upgrade)
+# ref: http://bsdwiki.reedmedia.net/wiki/Preserve_existing_SSH_host_keys_during_a_system_upgrade.html
+
+cp -p /etc/ssh/*key* ~/serverkeys/
+#later "cp -p" it back
+
 #####################################################
 ## ssh auto connect
 
@@ -62,4 +68,12 @@ ssh -C -N -L 8787:127.0.0.1:8787 bio3r
 ssh -C -L 8787:127.0.0.1:8787 bio3r
 ssh -C -L 8787:srv-bio4:8787 bio3r
 
+#####################################################
+## server Jumping
+## ssh to dest-srv through sshing to jmp-srv first
+ssh -J jmp-srv dest-srv
+
+# chaging ~/.ssh/confg
+Host dest-srv
+    ProxyJump jmp-srv
 
