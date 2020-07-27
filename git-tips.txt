@@ -36,6 +36,9 @@ git config --global --add difftool.prompt false
 - using opendiff in `git mergetool`
 git config --global merge.tool opendiff
 
+- ignoring file mode changes
+git config core.fileMode false
+
 Adding repository
 -----------------
 
@@ -218,6 +221,17 @@ git checkout -b <new_branch> --track origin/<new_branch>
 - pushing all branches (no need for previous one)
 git push --all origin -u
 git push --tags origin
+
+Worktree
+--------
+- adding worktree at a (new) directory dir, for branch br1. here br1 must be checked-out.
+git worktree add dir br1
+
+- where are the work directory:
+git worktree list
+
+- remove a workspace at directory dir
+git worktree remove dir
 
 Rebase
 ------
