@@ -24,9 +24,6 @@ perl -F" " -nae 'print "$F[1] \n";' < t
 retirar aspas simples de começo ou fim de linhas:
 perl -ne 'chomp; $_=substr($_,1) if /^'\''/; chop if /'\''$/; print "$_\n";'
 
-obter colunas por posição:
-cut
-
 -- netstat --
 portas em listem:
 netstat -lpt
@@ -73,3 +70,22 @@ pbpaste
 rpm -qa --queryformat '%10{size} - %-25{name} \t %{version} \t %{os} \n' | sort -rh | head -25 | awk '{print $1/1024/1024, $2, $3, $4}'
 
 -- useful: dnf autoremove
+
+-- text processing (mostly coreutils)
+diff
+comm
+head, tail
+cat, tac
+split, csplit
+sort
+join
+shuf
+uniq
+column
+cut
+paste
+expand/unexpand: tabs-spaces
+tr
+seq
+fmt, fold
+nl
