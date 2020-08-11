@@ -89,3 +89,12 @@ tr
 seq
 fmt, fold
 nl
+
+-- charset conversion
+ref: https://stackoverflow.com/q/64860
+ref: https://www.linux.com/news/linux-tools-convert-file-formats/
+dos2unix/unix2dos
+iconv, iconv -l
+recode, recode -l
+file -i
+chardet/chardetect
