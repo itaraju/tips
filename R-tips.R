@@ -56,3 +56,9 @@ regmatches(sa, m) <- sapply(regmatches(sa, m), as.roman)
 ## storing libraries in ~/Library/R/
 # bash$ mv ~/Library/R/3.3 ~/Library/R/3.4
 update.packages(checkBuilt=TRUE, ask=FALSE)
+
+################################################################
+## remove accents
+## ref: https://stackoverflow.com/a/35684410
+library(stringi)
+stri_trans_general( <string> ,"Latin-ASCII")
