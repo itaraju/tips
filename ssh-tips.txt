@@ -77,3 +77,15 @@ ssh -J jmp-srv dest-srv
 Host dest-srv
     ProxyJump jmp-srv
 
+#####################################################
+## multiplexing - to reuse ssh connections
+# ref: https://www.cyberciti.biz/faq/linux-unix-reuse-openssh-connection/
+
+# add to ~/.ssh/config:
+Host *
+	IdentitiesOnly yes
+	ControlMaster auto
+	ControlPath /tmp/ssh-%r@%h:%p
+	ControlPersist yes
+
+# "ControlPersist no" might be interesting as well
