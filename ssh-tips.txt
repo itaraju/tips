@@ -3,6 +3,7 @@
 
 # obtain fingerprint from server
 # ref: man ssh ("verifying host keys") / https://askubuntu.com/a/83499
+# add -E md5/sha256 to change hash algorithm
 ssh-keygen -l -f /etc/ssh/ssh_host_rsa_key
 
 # list known fingerprints
