@@ -98,3 +98,33 @@ iconv, iconv -l
 recode, recode -l
 file -i
 chardet/chardetect
+
+
+-- user admin
+ref: https://linuxtechlab.com/rename-user-in-linux-rename-home-directory/
+
+rename user:
+ usermod -l new_username old_username
+renameing Home directory:
+ sudo usermod -d /home/susan -m susan
+Changing UID for the user:
+ sudo usermod -u 2000 susan
+Renaming the group
+ groupmod -n susan dan
+Changing group id
+ groupmod -g N <group>
+
+Check everything:
+id <user>
+
+# new user: useradd
+# new group: groupadd
+# adding to group to user
+# (same as sudo usermod -a -G <group> <user>
+sudo usermod --append --groups <group> <user>
+
+# users
+# sudoers
+# use: visudo, edit /etc/sudoers: uncomment '%wheel' line, with password
+# then:
+usermod -aG wheel <user>
