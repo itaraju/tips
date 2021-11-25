@@ -62,3 +62,8 @@ update.packages(checkBuilt=TRUE, ask=FALSE)
 ## ref: https://stackoverflow.com/a/35684410
 library(stringi)
 stri_trans_general( <string> ,"Latin-ASCII")
+
+################################################################
+## X forwarding in ssh if R is already running:
+# start new device with
+X11(display=<correct value for $DISPLAY env variable>)
