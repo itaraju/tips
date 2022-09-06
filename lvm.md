@@ -11,6 +11,7 @@ http://blogs.kasa.ws/how-to-install-new-disk-drives-in-fedora/
 Listing partitions
 # fdisk -l
 # ls -l /dev/sd*
+# lsblk -o NAME,FSTYPE,LABEL,SIZE,MOUNTPOINT
 
 new disk on /dev/sdb, partitioning
 # fdisk /dev/sdb
