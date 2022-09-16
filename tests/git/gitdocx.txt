@@ -1,0 +1,22 @@
+Goal: to keep track of changes in docx document in git
+
+hopefully, changes tracked include:
+- all text
+- paragraphs and spacing
+- main font formating
+- tables
+
+reference:
+https://hrishioa.github.io/tracking-word-documents-with-git/
+
+It's enough to have these 2 steps:
+
+1) .gitattributes with:
+
+*.docx diff=pandoc
+
+2) Add to .git/config:
+
+[diff "pandoc"]
+  textconv=pandoc --to=markdown
+  prompt = false
