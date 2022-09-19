@@ -1,0 +1,79 @@
+Testing workflow with patches/email to share commits
+
+PROJS=~/Projects/test
+
+Init:
+
+	mkdir -p $PROJS/proj1
+	cd !$
+	git init
+	echo "file1" > a.txt
+	git add a.txt
+	git commit -m "init"
+
+Repo:
+
+	cd $PROJS
+	mkdir myhub
+	cd proj1
+	git clone --bare . ../myhub/proj1.git
+	git remote add origin $PROJS/myhub/proj1.git
+
+Making changes:
+
+	cd $PROJS/proj1
+	echo "ch1" >> a.txt
+	echo "file2" > b.txt
+	git add .
+	git commit -m "change 1"
+
+Before pushing change, cloning current upstream to a new repo:
+
+	cd $PROJS
+	git clone $PROJS/myhub/proj1.git ./clone
+	cd clone
+	git log
+
+Sending patch
+
+	cd $PROJS/proj1
+	git format-patch --stdout HEAD~ > ch1.patch
+	cp ch1.patch $PROJS/clone
+
+Applying patch
+
+	cd $PROJS/clone
+	git am --committer-date-is-author-date ch1.patch
+	git am ch1.patch
+
+Checking log, observing hashes of commit -- they should match
+
+	git log
+	cd $PROJS/proj1
+	git log
+
+Spreading change1 from proj1 to repo:
+
+	git push -u origin main
+
+Checking if clone is "Already up to date":
+
+	cd $PROJS/clone
+	git log
+	git pull
+	git log
+
+If --committer-date-is-author-date is not used in `git am` then
+it should be used here: `git pull --rebase` or
+git fetch
+git rebase --reapply-cherry-picks
+
+(Rebase with --reapply-cherry-picks will work out even if changes sent
+ throught git diff/apply)
+
+
+Ending
+
+	cd $PROJS
+	cd ..
+	rm -rf test
