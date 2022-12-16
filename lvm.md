@@ -65,4 +65,4 @@ lvs
 - here, volume group already has free space, so skipping first steps
     vgs / vgdisplay vg home shows free space
 
-
+- resize2fs <dev> - to actually resize the filesystem after lvm changes
