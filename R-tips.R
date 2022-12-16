@@ -67,3 +67,11 @@ stri_trans_general( <string> ,"Latin-ASCII")
 ## X forwarding in ssh if R is already running:
 # start new device with
 X11(display=<correct value for $DISPLAY env variable>)
+
+################################################################
+## using and switching BLAS/LAPACK for linear algebra
+library(flexiblas)
+flexiblas_avail()
+flexiblas_current_backend()
+flexiblas_get_num_threads()
+flexiblas_set_num_threads(16)
