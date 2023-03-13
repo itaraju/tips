@@ -162,3 +162,8 @@ Check if things still look good
 % diff -rq /home /media/newhome
 
 8- Reboot
+
+Fullscreen on wrong monitor
+===========================
+ref: https://chrisnewland.com/fixing-virtualbox-fullscreen-on-wrong-monitor-38
+hit <vm-key>-home, choose View-> which virtual screen -> which monitor
