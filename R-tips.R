@@ -3,6 +3,9 @@
 #?clipboard
 #OS X users can use pipe("pbpaste") and pipe("pbcopy", "w") to read from and write to that system's clipboard.
 x = read.table(pipe("pbpaste"))
+# linux
+x = read.table(pipe('xclip -o -sel clip'))
+x = fread(cmd='xclip -o -sel clip')
 
 ################################################################
 ## open xlsx
