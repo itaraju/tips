@@ -11,6 +11,10 @@ find -iname 'pattern' |xargs -I{} rm {}
 similar:
  find ~/gs-v1/ -iname '._*' |xargs -I{} rm -v {}
 
+--
+xargs with pipes:
+ find <options> |xargs -I{} sh -c "cmd1 | cmd2"
+
 ---
 Replacing underlines with spaces on all files within a directory
     for f in `ls -1 *_*`; do mv "$f" "$(echo "$f" | sed "s/_/ /g")"; done
