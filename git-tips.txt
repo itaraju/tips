@@ -146,6 +146,9 @@ git reset --soft <commit>
 - Replace last commit to new commit
 git commit --amend -m "message"
 
+- unstage added changes (undo git add file)
+git restore --staged file
+
 Stashing changes
 ----------------
 https://stackoverflow.com/questions/44680028/whats-the-difference-between-git-stash-save-and-git-stash-push#44681952
