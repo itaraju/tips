@@ -61,6 +61,12 @@ git remote add origin path/to/repo.git
 git remote set-url origin git@github.com:User/project-new.git
 git remote set-url origin https://github.com/user/project-new
 
+- a bare repo with a worktree. Best approach to SO answer
+  regarding Dropbox/git use: https://stackoverflow.com/a/48939309
+git init --bare proj.git
+cd !$
+git worktree add --orphan -b main path/proj-main
+
 Adding - general
 ----------------
 
